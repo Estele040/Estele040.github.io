@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>GRU</title>
+      <link href="/2024/03/28/GRU/"/>
+      <url>/2024/03/28/GRU/</url>
+      
+        <content type="html"><![CDATA[<h1 id="GRU"><a href="#GRU" class="headerlink" title="GRU"></a>GRU</h1><h3 id="1-什么是GRU"><a href="#1-什么是GRU" class="headerlink" title="1. 什么是GRU"></a>1. 什么是GRU</h3><p>GRU是循环神经网络的一种，为解决长期记忆和反向传播中的梯度等问题而提出的。</p><p>GRU和LSTM在很多情况下实际表现上相差无几，用GRU的原因在于：</p><blockquote><p>贫穷限制了我们的计算，so GRU is all your need!</p><p>(GRU)更容易进行训练。</p></blockquote><h3 id="2-GRU组件讲解"><a href="#2-GRU组件讲解" class="headerlink" title="2. GRU组件讲解"></a>2. GRU组件讲解</h3><h4 id="2-1-GRU的输入输出的结构"><a href="#2-1-GRU的输入输出的结构" class="headerlink" title="2.1 GRU的输入输出的结构"></a>2.1 GRU的输入输出的结构</h4><p>GRU的输入输出结构与普通的RNN是一样的。有一个当前输入$x^{t}$，和上一个节点传递下来的隐状态$h^{t-1}$，这个隐状态包含了之前节点的相关信息。</p><p>而输出$y^{t}$是由$x^{t}$和$h^{t-1}$共同决定的，同时$h^{t-1}$的信息会通过GRU传递给下一个节点隐藏状态$h^{t}$。</p><p><img src="/home/xxfs/.config/Typora/typora-user-images/image-20240327212521107.png" alt="image-20240327212521107"></p><h4 id="2-2-GRU的内部结构"><a href="#2-2-GRU的内部结构" class="headerlink" title="2.2 GRU的内部结构"></a>2.2 GRU的内部结构</h4><p>首先，我们先通过上一个传输下来的$h^{t-1}$和当前节点的$x^{t}$来获取两个门控状态。下图中，r为控制重置的门控（reset gate），z为控制更新的门控（upgrade gate）。</p><p><img src="/home/xxfs/.config/Typora/typora-user-images/image-20240327213115939.png" alt="image-20240327213115939"></p><p>得到门控信号之后，首先用重置门控来得到“<strong>重置</strong>”之后的数据$h^{t-1’}·r$，再将$h^{t-1’}$与输入$x^{t}$进行拼接，再通过一个tanh激活函数来将数据放缩到$-1 ～ 1$的范围之内。即得到如下图2-3所示的$h’$。</p><p><img src="/home/xxfs/.config/Typora/typora-user-images/image-20240327213416114.png" alt="image-20240327213416114"></p><p>这里的$h’$主要是包含了当前输入的$x’$数据。有针对性地对$h’$添加到当前的隐藏状态，相当于“记忆了当前时刻的状态”。类似于LSTM的选择记忆阶段。</p><p><img src="/home/xxfs/.config/Typora/typora-user-images/image-20240327214217417.png" alt="image-20240327214217417"></p><blockquote><p>图2-4中的 ⊙ 是Hadamard Product，也就是操作矩阵中对应的元素相乘，因此要求两个相乘矩阵是同型的。 ⊕ 则代表进行矩阵加法操作。</p></blockquote><p>最后一个RUG最关键的一个步骤，我们可以称之为“<strong>更新记忆</strong>”阶段。</p><p>在这个阶段，我们同时进行了遗忘和记忆两个步骤。我们使用了先前得到的门控$z$（upgrade gate）。</p><p>更新表达式子：$h^{t} &#x3D; (1-z)·h^{t-1} + z·h’$​。</p><p>首先再次强调一下，门控（这里的z）的范围0～1。门控信号越接近1，代表“记忆”下来的数据多；而越接近0则代表“遗忘”的越多。</p><p>我们使用了同一个门控可以进行遗忘和记忆。（LSTM则要使用多个门控）。</p><ul><li>$(1-z)·h^{t-1}$：表示对原本隐藏状态的选择性“遗忘”。这里的1-z可以想象成遗忘门（forget gate），忘记$h^{t-1}$维度中一些不重要的信息。</li><li>$z·h’$：表示对包含当前节点信息的$h’$进行“选择性”记忆。与上面类似，这里的（1-z）可以想象成遗忘门（forget gate），忘记$h^{t-1}$​维度中一些不重要的信息。</li><li>$h^{t} &#x3D; (1-z)·h^{t-1} + z·h’$：结合上述，这一步的操作就是忘记传递下来的$h^{t-1}$中的某些维度信息，并加入当前节点输入的某些维度信息。</li></ul><blockquote><p>可以看到，这里的遗忘$z$和选择$(1-z)$是联动的。也就是说，对于传递进来的维度信息，我们会进行选择性遗忘，则遗忘了多少权重$(z)$，我们就会包含当前输入的$h’$中所对应的权重进行弥补$(1-z)$。以保持一种”恒定“状态。</p></blockquote>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2024MCM（C题）部分思路</title>
       <link href="/2024/02/07/MCM2024%E9%83%A8%E5%88%86%E6%80%9D%E8%B7%AF%EF%BC%88C%E9%A2%98%EF%BC%89/"/>
       <url>/2024/02/07/MCM2024%E9%83%A8%E5%88%86%E6%80%9D%E8%B7%AF%EF%BC%88C%E9%A2%98%EF%BC%89/</url>
