@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>XXFS</title>
+  
+  
+  <link href="https://xxfs040.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://xxfs040.github.io/"/>
+  <updated>2023-09-01T14:55:04.393Z</updated>
+  <id>https://xxfs040.github.io/</id>
+  
+  <author>
+    <name>xxfs</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>C++Priemr.md</title>
+    <link href="https://xxfs040.github.io/2023/09/01/C++Primer/"/>
+    <id>https://xxfs040.github.io/2023/09/01/C++Primer/</id>
+    <published>2023-09-01T13:12:34.000Z</published>
+    <updated>2023-09-01T14:55:04.393Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;C-Primer&quot;&gt;&lt;a href=&quot;#C-Primer&quot; class=&quot;headerlink&quot; title=&quot;C++ Primer&quot;&gt;&lt;/a&gt;C++ Primer&lt;/h1&gt;</summary>
+    
+    
+    
+    <category term="C++" scheme="https://xxfs040.github.io/categories/C/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>DeepLearning</title>
+    <link href="https://xxfs040.github.io/2023/08/07/DeepLearning/"/>
+    <id>https://xxfs040.github.io/2023/08/07/DeepLearning/</id>
+    <published>2023-08-07T15:19:01.000Z</published>
+    <updated>2023-09-17T15:24:32.033Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;DeepLearning&quot;&gt;&lt;a href=&quot;#DeepLearning&quot; class=&quot;headerlink&quot; title=&quot;DeepLearning&quot;&gt;&lt;/a&gt;DeepLearning&lt;/h1&gt;&lt;p&gt;关于 dl 一些笔记，或是不懂的问题的记录……:happy:&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="deep learning" scheme="https://xxfs040.github.io/categories/deep-learning/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>softmax回归</title>
+    <link href="https://xxfs040.github.io/2023/08/07/softmax%E5%9B%9E%E5%BD%92/"/>
+    <id>https://xxfs040.github.io/2023/08/07/softmax%E5%9B%9E%E5%BD%92/</id>
+    <published>2023-08-07T15:19:01.000Z</published>
+    <updated>2023-09-15T07:13:19.298Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;softmax-回归&quot;&gt;&lt;a href=&quot;#softmax-回归&quot; class=&quot;headerlink&quot; title=&quot;softmax  回归&quot;&gt;&lt;/a&gt;softmax  回归&lt;/h2&gt;&lt;p&gt;softmax 回归实际上是分类问题。&lt;/p&gt;
+&lt;h3 id=&quot;预备知识&quot;&gt;&lt;a href=&quot;#预备知识&quot; class=&quot;headerlink&quot; title=&quot;预备知识&quot;&gt;&lt;/a&gt;预备知识&lt;/h3&gt;&lt;p&gt;sigmoid函数，softmax函数，极大似然估计，交叉熵函数，one-hot编码。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="deep learning" scheme="https://xxfs040.github.io/categories/deep-learning/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>一些记录或是吐嘈</title>
+    <link href="https://xxfs040.github.io/2023/08/07/SummerRecord2023/"/>
+    <id>https://xxfs040.github.io/2023/08/07/SummerRecord2023/</id>
+    <published>2023-08-07T08:02:29.000Z</published>
+    <updated>2023-08-21T11:07:15.088Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;用于记录2023暑假剩余时间的学习日程&quot;&gt;&lt;a href=&quot;#用于记录2023暑假剩余时间的学习日程&quot; class=&quot;headerlink&quot; title=&quot;用于记录2023暑假剩余时间的学习日程&quot;&gt;&lt;/a&gt;用于记录2023暑假剩余时间的学习日程&lt;/h1&gt;</summary>
+    
+    
+    
+    <category term="Recording" scheme="https://xxfs040.github.io/categories/Recording/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>python</title>
+    <link href="https://xxfs040.github.io/2023/08/06/python/"/>
+    <id>https://xxfs040.github.io/2023/08/06/python/</id>
+    <published>2023-08-06T06:12:21.000Z</published>
+    <updated>2023-08-07T08:06:42.391Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Python&quot;&gt;&lt;a href=&quot;#Python&quot; class=&quot;headerlink&quot; title=&quot;Python&quot;&gt;&lt;/a&gt;Python&lt;/h1&gt;&lt;p&gt;Python的学习记录。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="python" scheme="https://xxfs040.github.io/categories/python/"/>
+    
+    
+    <category term="python" scheme="https://xxfs040.github.io/tags/python/"/>
+    
+  </entry>
+  
+</feed>

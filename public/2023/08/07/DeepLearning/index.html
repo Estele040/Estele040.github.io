@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xxfs040.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="DeepLearning关于 dl 一些笔记，或是不懂的问题的记录……:happy:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DeepLearning">
+<meta property="og:url" content="https://xxfs040.github.io/2023/08/07/DeepLearning/index.html">
+<meta property="og:site_name" content="XXFS">
+<meta property="og:description" content="DeepLearning关于 dl 一些笔记，或是不懂的问题的记录……:happy:">
+<meta property="og:locale">
+<meta property="og:image" content="https://xxfs040.github.io/home/xxfs/study/recording/deep_learning/photos/2023-08-14%2020-48-23%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="https://xxfs040.github.io/home/xxfs/study/recording/deep_learning/photos/2023-08-14%2020-53-33%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="https://xxfs040.github.io/home/xxfs/study/recording/deep_learning/photos/2023-08-14%2021-18-27%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="https://xxfs040.github.io/home/xxfs/study/recording/deep_learning/photos/2023-08-14%2021-52-57%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="https://xxfs040.github.io/home/xxfs/study/recording/deep_learning/photos/2023-08-14%2022-07-56%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="https://xxfs040.github.io/home/xxfs/study/recording/deep_learning/photos/2023-08-18%2010-37-40%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="https://xxfs040.github.io/home/xxfs/study/recording/deep_learning/photos/2023-08-18%2014-51-23%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="https://xxfs040.github.io/home/xxfs/study/recording/deep_learning/photos/2023-08-18%2014-54-34%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="https://xxfs040.github.io/home/xxfs/study/recording/deep_learning/photos/2023-08-18%2014-56-01%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="https://xxfs040.github.io/source/images/2023-09-15%2021-17-12%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="https://xxfs040.github.io/2023/08/07/DeepLearning/source/images/2023-09-15%2021-39-05%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="article:published_time" content="2023-08-07T15:19:01.000Z">
+<meta property="article:modified_time" content="2023-09-17T15:24:32.033Z">
+<meta property="article:author" content="xxfs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xxfs040.github.io/home/xxfs/study/recording/deep_learning/photos/2023-08-14%2020-48-23%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+
+<link rel="canonical" href="https://xxfs040.github.io/2023/08/07/DeepLearning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>DeepLearning | XXFS</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="XXFS" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">XXFS</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="link fa-fw"></i>Links</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://xxfs040.github.io/2023/08/07/DeepLearning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/118061468?v=4">
+      <meta itemprop="name" content="xxfs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XXFS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DeepLearning
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-08-07 23:19:01" itemprop="dateCreated datePublished" datetime="2023-08-07T23:19:01+08:00">2023-08-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2023/08/07/DeepLearning/" class="post-meta-item leancloud_visitors" data-flag-title="DeepLearning" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="DeepLearning"><a href="#DeepLearning" class="headerlink" title="DeepLearning"></a>DeepLearning</h1><p>关于 dl 一些笔记，或是不懂的问题的记录……:happy:</p>
+<span id="more"></span>
+<h2 id="多层感知机"><a href="#多层感知机" class="headerlink" title="多层感知机"></a>多层感知机</h2><h3 id="1-1-线性模型可能会出错"><a href="#1-1-线性模型可能会出错" class="headerlink" title="1.1 线性模型可能会出错"></a>1.1 线性模型可能会出错</h3><p>例如，线性意味着单调假设：任何特征的增大都有可能导致模型输出的增大（如果相应的权重为正）；或导致模型权重的减小（如果相应的权重为负）。</p>
+<p>此外，数据的表示可能考虑到特征之间的相关交互作用。在此表示的基础上建立一个线性模型可能会是合适的， 但我们不知道如何手动计算这么一种表示。 对于深度神经网络，我们使用观测数据来联合学习隐藏层表示和应用于该表示的线性预测器。</p>
+<h3 id="1-2-在网络中加入隐藏层"><a href="#1-2-在网络中加入隐藏层" class="headerlink" title="1.2 在网络中加入隐藏层"></a>1.2 在网络中加入隐藏层</h3><p>我们可以考虑在网络中加入一个或多个隐藏层来克服线性模型的限制，能使其处理更普遍函数之间的关系。要做到这一点，最简单的方法就是将许多全连接层堆叠到一起。每一层都输出到上面的层，直到生成最后的输出。我们可以把前面的$L-1$层看作表示，把最后一层看作线性预测器。这种架构通常称为多层感知机。</p>
+<h3 id="1-3-从线性到非线性"><a href="#1-3-从线性到非线性" class="headerlink" title="1.3 从线性到非线性"></a>1.3 从线性到非线性</h3><p>我们通过$X \in R^{n×h}$来表示n个样本的小批量，其中每个样本具有d个输入特征。对于具有$h$个隐藏单元的单层隐藏多层感知机，用$H\in R^{n<em>h}$表示隐藏层的输出，称为隐藏表示。在数学或代码中，$H$也被称为隐藏层变量（hidden-layer variable）或隐藏变量（hidden variable）。因为隐藏层和输出层都是全连接的，所以我们具有隐藏层权重$W \in R^{d×h}$和隐藏层偏置$b^{(1)} \in R^{1</em>h}$以及输出层权重$W^{(2)} \in R^{h×q}$和输出层偏置$b^{(2)} \in R^{1×q}$。形式上我们按如下方式计算单隐藏层多层感知机的输出$O \in R^{n×q}$：</p>
+<script type="math/tex; mode=display">
+H = XW^{ (1) } + b^{ (1) }，
+O = HW^{ (2) }  + b^{ (2) },
+\tag{1}</script><p>注意在添加隐藏层之后，模型现在需要跟踪和更新额外的参数。 可我们能从中得到什么好处呢？在上面定义的模型里，我们没有好处！ 原因很简单：上面的隐藏单元由输入的仿射函数给出， 而输出（softmax操作前）只是隐藏单元的仿射函数。 仿射函数的仿射函数本身就是仿射函数， 但是我们之前的线性模型已经能够表示任何仿射函数。</p>
+<p>为了发挥多层架构的潜力，我们还需要一个额外的关键因素：在仿射变换之后对每个隐藏单元应用非线性激活函数（activation function）$\sigma$。激活函数的输出（例如，$\sigma(.)$）被称为活性值（activation）。一般来说，有了激活函数，就不可能再将我们的多层感知机退化成现行模型：</p>
+<script type="math/tex; mode=display">
+H = \sigma(XW^{(1)} + b^{ (1) } )
+O = HW^{(2)} + b^{ (2) } \tag{2}</script><p>由于$X$中的每一行都对应于小批量中的一个样本，处于记号习惯的考量，我们定义非线性函数$\sigma$也以按行的方式作用于其输入，即一次计算一个样本。但是本节应用于隐藏层的激活函数通常不按行进行操作，也按元素操作。</p>
+<p>这意味着，在计算每一层的线性部分之后，我们可以计算每个活性值，而不需要查看其他隐藏单元所取的值。对于大多数激活函数都是这样。</p>
+<h3 id="1-4-通用近似定理"><a href="#1-4-通用近似定理" class="headerlink" title="1.4 通用近似定理"></a>1.4 通用近似定理</h3><p>多层感知机可以通过隐藏神经元，捕捉到输入之间复杂的相互作用， 这些神经元依赖于每个输入的值。 我们可以很容易地设计隐藏节点来执行任意计算。例如，在一对输入上进行基本的逻辑操作，多层感知机是通用近似器。即使网络只有一个隐藏层，给足够的神经元和足够的权重，我们可以对任意函数建模，尽管实际中学习该函数是很困难的神经网络有点像C语言。 C语言和任何其他现代编程语言一样，能够表达任何可计算的程序。 但实际上，想出一个符合规范的程序才是最困难的部分。</p>
+<p>而且，虽然一个单隐层网络能学习任何函数， 但并不意味着我们应该尝试使用单隐藏层网络来解决所有问题。 事实上，通过使用更深（而不是更广）的网络，我们可以更容易地逼近许多函数。 我们将在后面的章节中进行更细致的讨论。</p>
+<h3 id="1-5-激活函数"><a href="#1-5-激活函数" class="headerlink" title="1.5 激活函数"></a>1.5 激活函数</h3><p>激活函数（activate function）通过计算加权和并加上偏置来确定神经元是否应该被激活，他们将输入信号转换为输出的可微运算，大多数激活函数都是非线性的。由于激活函数是深度学习的基础，下面介绍一些简单的激活函数。</p>
+<h3 id="1-6-ReLU函数"><a href="#1-6-ReLU函数" class="headerlink" title="1.6 ReLU函数"></a>1.6 ReLU函数</h3><p>最受欢迎的激活函数是线性修正单元，因为它实现简单，同时在各种预测任务中表现良好。ReLU提供了一种非常简单的线性变换。给定元素$x$，ReLU函数被定义为该元素于0的最大值：</p>
+<script type="math/tex; mode=display">
+ReLU(x) = max(x,0)</script><p>通俗地说， ReLU 函数通过将相应的活性值设置为0，仅保留正元素，并丢弃所有负元素。为了直观的感受一下，我们可以画出函数的曲线图。正如从图中所看到，激活函数是分段线性的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">y = torch.arange(-<span class="number">8.0</span>, <span class="number">8.0</span>, <span class="number">0.1</span>, requires_grad = <span class="literal">True</span>)</span><br><span class="line">y = torch.relu(x)</span><br><span class="line">d2l.plot(x.detach(), y.detach(), <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;relu(x)&#x27;</span>, figsize=(<span class="number">5</span>, <span class="number">2.5</span>))</span><br><span class="line"><span class="comment">#返回一个新的tensor，从当前计算图中分离下来的，但是仍指向原变量的存放位置,不同之处只是requires_grad为false，得到的这个tensor永远不需要计算其梯度，不具有grad。</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这样我们就会继续使用这个新的<code>tensor进行计算，后面当我们进行</code>反向传播时，到该调用detach()的<code>tensor</code>就会停止，不能再继续向前进行传播。</p>
+<p>注意：使用detach()返回的Tensor和原始的tensor共用一个内存，即一个修改另一个也会跟着改变。</p>
+<p>当使用detach()分离tensor但是没有更改这个tensor时，并不会影响backward()。</p>
+<p>当使用detach()分离tensor，然后用这个分离出来的tensor去求导数，会影响backward()，会出现错误。</p>
+<p>当使用detach()分离tensor并且更改这个tensor时，即使再对原来的out求导数，会影响backward()，会出现错误。</p>
+</blockquote>
+<p><img src="/home/xxfs/study/recording/deep_learning/photos/2023-08-14 20-48-23 的屏幕截图.png" alt="8"></p>
+<p>当输入为负数时，ReLU导数为0，当输入为正数时，ReLU函数的导数为1。注意，输入值精确等于0时，ReLU函数不可导。在此时，我们默认使用左边导数，即当输入0的导数为0。我们可以忽略这种情况，因为输入可能永远都不会是0。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">y.backward(torch.ones_like(x), retrain_graph=<span class="literal">True</span>)</span><br><span class="line">d2l.plot(x.detach(), x.grad(), <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;grad of relu&#x27;</span>, figsize = (<span class="number">5</span>, <span class="number">2.5</span>))</span><br></pre></td></tr></table></figure>
+<p>下面我们绘制ReLU函数的导数。</p>
+<p><img src="/home/xxfs/study/recording/deep_learning/photos/2023-08-14 20-53-33 的屏幕截图.png" alt="7">下面我们绘制ReLU函数的导数。</p>
+<p>使用ReLU的原因是，它求导表现得特别好：要么让参数消失，要么让参数通过。 这使得优化表现得更好，并且<strong>ReLU减轻了困扰以往神经网络的梯度消失问题。</strong></p>
+<p>注意，ReLU函数有很多变体，包括参数化ReLU函数。改变体为ReLU添加了一个线性项，因此即使参数是负的，某些信息仍然可以通过：</p>
+<script type="math/tex; mode=display">
+pReLU(x) = max(0,x) + \alpha min(0, x)</script><h3 id="1-7-sigmoid函数"><a href="#1-7-sigmoid函数" class="headerlink" title="1.7 sigmoid函数"></a>1.7 sigmoid函数</h3><p>对一个定义域在$R$上的输入，sigmoid函数将输入变换为区间$(0,1)$上的输出。因此，sigmoid函数通常称为挤压函数：它将范围$(-inf, inf)$中的任意输入压缩到区间$(0,1)$中的某个值：</p>
+<script type="math/tex; mode=display">
+sigmoid(x) = \frac{1} {1 + exp(-x)}</script><p> 注意，当输入接近0时，sigmoid函数接近线性变换。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">y = torch.sigmoid(x)</span><br><span class="line">d2l.plot(x.detach(), y.detach(), <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;sigmoid(x)&#x27;</span>, figsize = (<span class="number">5</span>, <span class="number">2.5</span>))</span><br></pre></td></tr></table></figure>
+<p>sigmoid的导数为以下公式$\frac{d} {dx}sigmoid(x) = \frac{exp(-x)}{ { (1+exp(-x)) }^2} = sigmoid(x)(1-sigmoid(x))$ </p>
+<p>sigmoid函数的导数图像如下。注意，当输入为0时，sigmoid函数的导数最大可以达到0.25；而输入在任意方向上越远离0时，导数越接近0。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 清除以前的梯度</span></span><br><span class="line">x.grad.data.zero_()</span><br><span class="line">y.backward(torch.ones_like(x),retain_graph=<span class="literal">True</span>)</span><br><span class="line">d2l.plot(x.detach(), x.grad, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;grad of sigmoid&#x27;</span>, figsize=(<span class="number">5</span>, <span class="number">2.5</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="/home/xxfs/study/recording/deep_learning/photos/2023-08-14 21-18-27 的屏幕截图.png" alt="6"></p>
+<h3 id="1-8-tanh-函数"><a href="#1-8-tanh-函数" class="headerlink" title="1.8 tanh 函数"></a>1.8 tanh 函数</h3><p>与sigmoid函数类似，tanh （双曲正切）函数也能将其输入压缩转换到区间$(-1,1)$上。tanh 函数的公式如下：</p>
+<script type="math/tex; mode=display">
+tanh(x) = \frac{1 - exp(-2x)}{1 + exp(-2x)}</script><p>下面我们绘制tanh 函数。注意，当输入在0附近时，tanh函数接近线性变换。函数的形状类似于sigmoid函数，不同的是tanh函数关于坐标系远点中心对称。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">y = torch.tanh(x)</span><br><span class="line">d2l.plot(x.detach(), y.detach(), <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;tanh(x)&#x27;</span>, figsize=(<span class="number">5</span>, <span class="number">2.5</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="/home/xxfs/study/recording/deep_learning/photos/2023-08-14 21-52-57 的屏幕截图.png" alt="5"></p>
+<p>tanh 的物理导数是：</p>
+<script type="math/tex; mode=display">
+\frac{d}{dx}tanh(x) = 1 - tanh^2(x)</script><p>tanh 函数的导数图像如下所示。 当输入接近0时，tanh函数的导数接近最大值1。 与我们在sigmoid函数图像中看到的类似， 输入在任一方向上越远离0点，导数越接近0。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 清除以前的梯度</span></span><br><span class="line">x.grad.data.zero_()</span><br><span class="line">y.backward(torch.ones_like(x),retain_graph=<span class="literal">True</span>)</span><br><span class="line">d2l.plot(x.detach(), x.grad, <span class="string">&#x27;x&#x27;</span>, <span class="string">&#x27;grad of tanh&#x27;</span>, figsize=(<span class="number">5</span>, <span class="number">2.5</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="/home/xxfs/study/recording/deep_learning/photos/2023-08-14 22-07-56 的屏幕截图.png" alt="4"></p>
+<h2 id="模型选择，过拟合和欠拟合"><a href="#模型选择，过拟合和欠拟合" class="headerlink" title="模型选择，过拟合和欠拟合"></a>模型选择，过拟合和欠拟合</h2><h3 id="误差"><a href="#误差" class="headerlink" title="误差"></a>误差</h3><h4 id="训练误差"><a href="#训练误差" class="headerlink" title="训练误差"></a>训练误差</h4><p>训练误差是指模型在训练集上的错分样本比率，说白了就是在训练集上训练完毕后在训练集本身上进行预测得到了错分率</p>
+<h4 id="泛化误差"><a href="#泛化误差" class="headerlink" title="泛化误差"></a>泛化误差</h4><p><em>泛化误差</em>（generalization error）是指， 模型应用在同样从原始样本的分布中抽取的无限多数据样本时，模型误差的期望。</p>
+<p>问题是我们永远不能准确的计算出泛化误差。这是因为无限多的数据样本是一个虚构的对象。在实际中，我们只能通过模型应用于一个独立的测试集来估计泛化误差，该测试集由随机选取的，未曾在训练集中出现的样本构成。</p>
+<p>泛化误差的意义，其实就是在模型训练后查看模型是否具有代表性。</p>
+<p>泛化误差的公式为:$E_G(\omega) = \sum_{x \in X}p(x)(\hat f (x|\omega) - f(x))^2$，即全集X中x出现的概率乘以其相对应的训练误差。</p>
+<p>但是过分追求低训练误差会使得模型过拟合于训练集反而不使用于其他数据。</p>
+<p>因此在样本集划分时，如果得到的训练集与测试集的数据没有交集，此时测试误差基本等同于泛化误差。</p>
+<h3 id="系统学习理论"><a href="#系统学习理论" class="headerlink" title="系统学习理论"></a>系统学习理论</h3><h4 id="独立同分布"><a href="#独立同分布" class="headerlink" title="独立同分布"></a>独立同分布</h4><p>假设训练数据和测试数据都是从相同的分布中独立提取的，这通常被称为独立同分布假设，这意味这对数据进行采样的过程没有进行”记忆”。</p>
+<p>影响模型泛化的因素：</p>
+<ol>
+<li>可调整参数的数量。当可调整参数的数量（有时称为<em>自由度</em>）很大时，模型往往更容易过拟合。</li>
+<li>参数采用的值。当权重的取值范围较大时，模型可能更容易过拟合。</li>
+<li>训练样本的值。即使模型很简单，也很容易过拟合只包含一两个样本的数据集。而过拟合一个有数百万个样本的数据集则需要一个极其灵活的模型。</li>
+</ol>
+<h4 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h4><p>在机器学习中，在我们确定所有超参数之前，我们不希望用到测试集。如果我们在模型选择过程中使用测试数据，有可能会过拟合测试数据的风险，那就麻烦大了。如果我们过拟合来训练数据，还可以在测试数据上的评估来判断过拟合。但是如果我们拟合了测试数据集，我们又该怎么知道呢?</p>
+<p>因此，我们决不能靠测试数据进行模型的选择。然而，我们也不能依靠训练模型来选择模型，因为我们无法估计训练数据的泛化误差。</p>
+<p>在实际应用中，情况变得更加复杂。虽然理想情况下，我们只会使用测试数据一次，以评估最好的模型或比较一些模型的效果，但现实是测试数据很少在使用一次后被丢弃。我们很少能有充足的实验来对每一轮实验才用全新的测试集。</p>
+<p>解决此问题的常见做法是将我们的数据分成三份，除了训练集和测试集外，还增加依一个验证数据集，也叫验证集（validation dataset）。但现实是验证数据和测试数据之间模糊地令人担忧。除非另有明确说明，否则在本书的实验中，我们实际上实在使用应该被正确地称为训练数据和验证数据的数据集，并没有真正的测试数据集。因此，文中每次实验报告的准确度都是验证集准确度，而不是测试集准确度。</p>
+<h4 id="K折交叉验证"><a href="#K折交叉验证" class="headerlink" title="K折交叉验证"></a>K折交叉验证</h4><p>当训练数据稀缺时，我们甚至可能无法提供足够的数据来构成一个适合的验证集。这个问题的一个流行解决方案是采用K折交叉验证。这里，原始训练数据被分成K个不重叠的子集。然后执行K次模型训练和验证，每次在$K-1$个子集上进行训练，并在剩余一个子集（该轮中没有用于训练的子集）进行验证。最后，通过对K次实验的结果取平均值来估计训练和验证的误差。</p>
+<h3 id="欠拟合-amp-amp-过拟合"><a href="#欠拟合-amp-amp-过拟合" class="headerlink" title="欠拟合&amp;&amp;过拟合"></a>欠拟合&amp;&amp;过拟合</h3><h4 id="欠拟合"><a href="#欠拟合" class="headerlink" title="欠拟合"></a>欠拟合</h4><p>欠拟合是指模型不能在训练集上获得足够低的误差。换句换说，就是模型复杂度低，模型在训练集上就表现很差，没法学习到数据背后的规律。</p>
+<p>当我们比较训练和验证误差时，我们要注意两种常见的情况。</p>
+<h4 id="如何解决欠拟合"><a href="#如何解决欠拟合" class="headerlink" title="如何解决欠拟合"></a>如何解决欠拟合</h4><p>欠拟合基本上都会发生在训练刚开始的时候，经过不断训练之后欠拟合应该不怎么考虑了。但是如果真的还是存在的话，可以通过<strong>增加网络复杂度</strong>或者在模型中<strong>增加特征</strong>，这些都是很好解决欠拟合的方法。</p>
+<h4 id="过拟合"><a href="#过拟合" class="headerlink" title="过拟合"></a>过拟合</h4><p>过拟合是指训练误差和测试误差之间的差距太大。换句换说，就是模型复杂度高于实际问题，<strong>模型在训练集上表现很好，但在测试集上却表现很差</strong>。模型对训练集”死记硬背”（记住了不适用于测试集的训练集性质或特点），没有理解数据背后的规律，<strong>泛化能力差</strong>。</p>
+<h4 id="为什么会出现过拟合现象？"><a href="#为什么会出现过拟合现象？" class="headerlink" title="为什么会出现过拟合现象？"></a><strong>为什么会出现过拟合现象？</strong></h4><p>造成原因主要有以下几种：<br>1、<strong>训练数据集样本单一，样本不足</strong>。如果训练样本只有负样本，然后那生成的模型去预测正样本，这肯定预测不准。所以训练样本要尽可能的全面，覆盖所有的数据类型。<br>2、<strong>训练数据中噪声干扰过大</strong>。噪声指训练数据中的干扰数据。过多的干扰会导致记录了很多噪声特征，忽略了真实输入和输出之间的关系。<br>3、<strong>模型过于复杂。</strong>模型太复杂，已经能够“死记硬背”记下了训练数据的信息，但是遇到没有见过的数据的时候不能够变通，泛化能力太差。我们希望模型对不同的模型都有稳定的输出。模型太复杂是过拟合的重要因素。</p>
+<h4 id="如何防止过拟合？"><a href="#如何防止过拟合？" class="headerlink" title="如何防止过拟合？"></a>如何防止过拟合？</h4><p>通过正则化：修改学习算法，使其降低泛化误差而非训练误差。</p>
+<p>常用的正则化方法根据具体的使用策略不同可以分为：</p>
+<ol>
+<li>直接提供正则化约束的参数正则化方法，如$L1/L2$正则化；</li>
+<li>通过工程上的技巧来实现更低泛化误差的方法，如提前终止（early stopping）和（Drop）</li>
+<li>不直接提供约束的隐式正则化方法，如数据增强等等。</li>
+</ol>
+<p><strong>1. 获取和使用更多的数据（数据集增强） ——-解决过拟合的根本性方法</strong></p>
+<p>让机器学习或深度学习模型泛化能力更好的办法就是使用更多的数据进行训练。但是，在实践中，我们拥有的数据量是有限的。解决这个问题的一种方法就是<strong>创建“假数据”并添加到训练集中——数据集增强</strong>。通过增加训练集的额外副本来增加训练集的大小，进而改进模型的泛化能力。</p>
+<p>我们以图像数据集举例，能够做：旋转图像、缩放图像、随机裁剪、加入随机噪声、平移、镜像等方式来增加数据量。另外补充一句，在物体分类问题里，<strong>CNN在图像识别的过程中有强大的“不变性”规则，即待辨识的物体在图像中的形状、姿势、位置、图像整体明暗度都不会影响分类结果</strong>。我们就可以通过图像平移、翻转、缩放、切割等手段将数据库成倍扩充。</p>
+<p><strong>2. 采用适合的模型（控制模型的复杂度）</strong></p>
+<p>对于过于复杂的模型会带来过拟合问题1。对于模型的设计，目前公认的一个深度学习的规律是”deeper is better”。比如许多大牛通过实验和竞赛发现，对于CNN来说，层数越多，效果越好，但也更容易产生过拟合，并且计算所耗费的时间也越长。</p>
+<p><strong>对于模型的设计而言，我们应该选择简单、合适的模型解决复杂的问题。</strong></p>
+<p><strong>3.降低特征的数量</strong></p>
+<p>对于一些特征工程而言，可以降低特征的数量——删除冗余特征，人工选择保留哪些特征。这种方法也可以解决过拟合问题。</p>
+<p><strong>4. L1/L2正则化</strong></p>
+<p><strong>(1) L1正则化</strong></p>
+<p>在原始的损失函数后面加上一个L1正则化项</p>
+<p>首先，我们要注意这样的情况：</p>
+<ol>
+<li><p>训练误差和验证误差都很严重；</p>
+</li>
+<li><p>训练误差和验证误差之间仅有一点差距。</p>
+</li>
+</ol>
+<p>如果模型不能降低训练误差，这可能意味着模型过于简单（即表达能力不足），无法捕获试图学习的模式。此外，由于我们的训练和验证误差之间的泛化误差很小，我们有理由相信可以用一个更复杂的模型降低训练误差。这种现象被称为欠拟合（underfitting）。</p>
+<p>另一方方面，当我们的训练误差明显小于验证误差时要小心，这表明严重的过拟合（overfitting）。 注意，<em>过拟合</em>并不总是一件坏事。 特别是在深度学习领域，众所周知， 最好的预测模型在训练数据上的表现往往比在保留（验证）数据上好得多。 最终，我们通常更关心验证误差，而不是训练误差和验证误差之间的差距。</p>
+<p><strong>过拟合或欠拟合的因素：</strong></p>
+<ol>
+<li>模型的复杂性；</li>
+<li>训练数据集的大小。</li>
+</ol>
+<p><strong>模型的复杂性</strong></p>
+<p>为了说明一些关于过拟合和模型复杂性的经典直觉，我们给出一个多项式的例子。给定由单个特征$x$和和对应实数标签$y$组成的训练数据，我们试图找到下面的$d$阶多项式来估计标签$y$。</p>
+<script type="math/tex; mode=display">
+\hat{y} = \sum \limits_{i=0}^d x^i \omega_i</script><p>由于这是一个线性回归问题，我们可以用平方误差作为我们的损失函数。</p>
+<p>高阶函数比低阶函数复杂得多，高阶函数的参数较多，模型的选择范围较广。因此在固定训练数据集的情况下，高阶多项式函数相对于低阶多项式的的训练误差应该始终更低（最坏也是相等）。事实上，当数据样本包含了$x$的不同值时，函数阶数等于样本数据量的多项式函数可以完美拟合训练集。下图中我们直观描述了过拟合和欠拟合的关系。</p>
+<p><img src="/home/xxfs/study/recording/deep_learning/photos/2023-08-18 10-37-40 的屏幕截图.png" alt="3"></p>
+<p><strong>数据集大小</strong></p>
+<p>另一个重要因素是数据集的大小。 训练数据集中的样本越少，我们就越有可能（且更严重地）过拟合。 随着训练数据量的增加，泛化误差通常会减小。 此外，一般来说，更多的数据不会有什么坏处。 对于固定的任务和数据分布，模型复杂性和数据集大小之间通常存在关系。 给出更多的数据，我们可能会尝试拟合一个更复杂的模型。 能够拟合更复杂的模型可能是有益的。 如果没有足够的数据，简单的模型可能更有用。 对于许多任务，深度学习只有在有数千个训练样本时才优于线性模型。 从一定程度上来说，深度学习目前的生机要归功于 廉价存储、互联设备以及数字化经济带来的海量数据集。</p>
+<h3 id="多项式回归"><a href="#多项式回归" class="headerlink" title="多项式回归"></a>多项式回归</h3><p>我们现在可以通过多项式拟合来探索这些概念。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn</span><br><span class="line"><span class="keyword">from</span> d2l <span class="keyword">import</span> torch <span class="keyword">as</span> d2l</span><br></pre></td></tr></table></figure>
+<h4 id="生成数据集"><a href="#生成数据集" class="headerlink" title="生成数据集"></a>生成数据集</h4><p>给定$x$，我们将使用以下三阶多项式来生成训练和测试数据的标签：</p>
+<script type="math/tex; mode=display">
+y = 5 + 1.2x -3.4\frac{x^2}{2!} + 5.6\frac{x^3}{3!} + \epsilon \quad where \quad \epsilon ～ N(0,0.1^2).</script><p> 噪声$\epsilon$服从均值为0，标准差为1的正太分布。在优化的过程中，我们通常希望避免非常大的梯度值或损失值。这就是我们将特征从$x^i$调整为$\frac{x^i}{i!}$的原因，这样可以避免很大的$i$带来特别大的指数值。我们将训练集和测试集各生成100个样本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">max_degree = <span class="number">20</span> <span class="comment">#多项式的最大阶数</span></span><br><span class="line">n_train, n_test = <span class="number">100</span> <span class="comment">#训练和测试数据集将大小</span></span><br><span class="line">true_w = np.zeros(max_degree) <span class="comment"># 分配大量的空间</span></span><br><span class="line">true_w[<span class="number">0</span>:<span class="number">4</span>] = np.array([<span class="number">5</span>, <span class="number">1.2</span>, -<span class="number">3.4</span>, <span class="number">5.6</span>])</span><br><span class="line"></span><br><span class="line">features = np.random.normal(size=(n_train + n_test, <span class="number">1</span>))</span><br><span class="line">np.random.shuffle(features)</span><br><span class="line">poly_features = np.power(features, np.arange(max_degree).reshape(<span class="number">1</span>,-<span class="number">1</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(max_degree):</span><br><span class="line">    ploy_features[:,i] /= math.gamma(i+<span class="number">1</span>) <span class="comment">#gamma(n) = (n-1)!</span></span><br><span class="line"><span class="comment"># labels的维度（n_train + n_test,)</span></span><br><span class="line">labels = np.dot(poly_features, true_w)</span><br><span class="line">labels += np.random.normal(scale = <span class="number">0.1</span>, size = labels.shape)</span><br></pre></td></tr></table></figure>
+<p>同样，存储在ploy_features中的单项式由gamma函数重新缩放，其中$\Gamma(n) = (n-1)!$。从生成的数据集中查看一下前两个样本，第一个值是与偏置相对应的常量特征。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># NumPy ndarray转换为tensor</span></span><br><span class="line">true_w, features, poly_features, labels = [torch.tensor(x, dtype=</span><br><span class="line">    torch.float32) <span class="keyword">for</span> x <span class="keyword">in</span> [true_w, features, poly_features, labels]]</span><br><span class="line"></span><br><span class="line">features[:<span class="number">2</span>], poly_features[:<span class="number">2</span>, :], labels[:<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="对模型进行训练和测试"><a href="#对模型进行训练和测试" class="headerlink" title="对模型进行训练和测试"></a>对模型进行训练和测试</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">train_features, test_features, train_labels, test_labels</span></span><br><span class="line"><span class="params">         num_epochs = <span class="number">400</span></span>):</span><br><span class="line">    loss = nn.MESLoss(reduction=<span class="string">&#x27;none&#x27;</span>)</span><br><span class="line">    input_shape = train_features.shape[-<span class="number">1</span>]</span><br><span class="line">    <span class="comment">#不设置偏置，因为我们已经在多项式中实现了它</span></span><br><span class="line">    net = nn.Sequential(nn.Linear(input_shape, <span class="number">1</span>, bias=<span class="literal">False</span>))</span><br><span class="line">    batch_size = <span class="built_in">min</span>(<span class="number">10</span>, train_labels.shape[<span class="number">0</span>])</span><br><span class="line">    train_iter = d2l.load_array((train_features, train_labels.reshape(-<span class="number">1</span>,<span class="number">1</span>)),</span><br><span class="line">                               batch_size)</span><br><span class="line">    test_iter = d2l.load_array((test_features, test_labels.reshape(-<span class="number">1</span>,<span class="number">1</span>)),</span><br><span class="line">                              batch_size, is_train = <span class="literal">False</span>)</span><br><span class="line">    trainer = torch.optim.SGD(net.parameters(), lr=<span class="number">0.01</span>)</span><br><span class="line">    animator = d2l.Animator(xlabel=<span class="string">&#x27;epoch&#x27;</span>, ylabel=<span class="string">&#x27;loss&#x27;</span>, y.scale=<span class="string">&#x27;log&#x27;</span>,</span><br><span class="line">                           xlim=[<span class="number">1</span>,num_epochs], ylim = [<span class="number">1e-3</span>, <span class="number">1e2</span>],</span><br><span class="line">                           legend = [<span class="string">&#x27;train&#x27;</span>, <span class="string">&#x27;test&#x27;</span>])</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(num_epochs):</span><br><span class="line">        d2l.train_epoch_ch3(net, train_iter, loss, trainer)</span><br><span class="line">        <span class="keyword">if</span> epoch==<span class="number">0</span> <span class="keyword">or</span> (epoch + <span class="number">1</span>)%<span class="number">20</span> == <span class="number">0</span>:</span><br><span class="line">            animator.add(epoch + <span class="number">1</span>, (evaluate_loss(net, train_iter,loss),</span><br><span class="line">                                    evaluate_loss(net, test_iter,loss)))</span><br><span class="line">            </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;weight:&#x27;</span>, net[<span class="number">0</span>].weight.data.numpy())</span><br></pre></td></tr></table></figure>
+<h4 id="三阶多项式函数拟合"><a href="#三阶多项式函数拟合" class="headerlink" title="三阶多项式函数拟合"></a>三阶多项式函数拟合</h4><p>我们将首先使用三阶多项式函数，它与数据生成函数的阶数相同。 结果表明，该模型能有效降低训练损失和测试损失。学习到的模型参数也接近真实值$\omega=[5, 1.2, -3.4, 5.6]$。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#从多项式特征中选取前四个维度，即1, x, x^2/2!, x^3/3!</span></span><br><span class="line">train(poly_features[:n_train, :<span class="number">4</span>], ploy_features[n_train:, :<span class="number">4</span>],</span><br><span class="line">      labels[:n_train], labels[n_train:])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">weight: [[ <span class="number">4.993645</span>   <span class="number">1.2287872</span> -<span class="number">3.3972282</span>  <span class="number">5.559377</span> ]]</span><br></pre></td></tr></table></figure>
+<p><img src="/home/xxfs/study/recording/deep_learning/photos/2023-08-18 14-51-23 的屏幕截图.png" alt="2"></p>
+<h4 id="线性函数拟合（欠拟合）"><a href="#线性函数拟合（欠拟合）" class="headerlink" title="线性函数拟合（欠拟合）"></a>线性函数拟合（欠拟合）</h4><p>让我们再看看线性函数拟合，减少该模型的训练损失相对困难。 在最后一个迭代周期完成后，训练损失仍然很高。 当用来拟合非线性模式（如这里的三阶多项式函数）时，线性模型容易欠拟合。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 从多项式特征中选择前2个维度，即1和x</span></span><br><span class="line">train(poly_features[:n_train, :<span class="number">2</span>], poly_features[n_train:, :<span class="number">2</span>],</span><br><span class="line">      labels[:n_train], labels[n_train:])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">weight: [[<span class="number">2.5148914</span> <span class="number">4.2223625</span>]]</span><br></pre></td></tr></table></figure>
+<p><img src="/home/xxfs/study/recording/deep_learning/photos/2023-08-18 14-54-34 的屏幕截图.png" alt="2023-08-18 14-54-34 的屏幕截图"></p>
+<h4 id="高阶多项式拟合（过拟合）"><a href="#高阶多项式拟合（过拟合）" class="headerlink" title="高阶多项式拟合（过拟合）"></a>高阶多项式拟合（过拟合）</h4><p>现在，让我们尝试使用一个阶数过高的多项式来训练模型。 在这种情况下，没有足够的数据用于学到高阶系数应该具有接近于零的值。 因此，这个过于复杂的模型会轻易受到训练数据中噪声的影响。 虽然训练损失可以有效地降低，但测试损失仍然很高。 结果表明，复杂模型对数据造成了过拟合。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 从多项式特征中选取所有维度</span></span><br><span class="line">train(poly_features[:n_train, :], poly_features[n_train:, :],</span><br><span class="line">      labels[:n_train], labels[n_train:], num_epochs=<span class="number">1500</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/home/xxfs/study/recording/deep_learning/photos/2023-08-18 14-56-01 的屏幕截图.png" alt="1"></p>
+<h2 id="权重衰减"><a href="#权重衰减" class="headerlink" title="权重衰减"></a>权重衰减</h2><h3 id="L1-L2正则化和权重衰减"><a href="#L1-L2正则化和权重衰减" class="headerlink" title="L1/L2正则化和权重衰减"></a>L1/L2正则化和权重衰减</h3><p>L2范数也被称为欧几里得范数，可以简单理解为向模长。</p>
+<p>范数定义的公式如下：</p>
+<script type="math/tex; mode=display">
+||x||_p :=  (\sum_{i = 1}^{n}|x_i|^p)^{\frac{1}{p}}</script><h4 id="L1范数"><a href="#L1范数" class="headerlink" title="L1范数"></a>L1范数</h4><p>$p= 1$时称为$L1$范数(L1-norm)：</p>
+<script type="math/tex; mode=display">
+||x||_1 := \sum^n_{i = 1}|x_i|</script><p>$L1$范数是一组数的绝对值累加和。</p>
+<h4 id="L2范数"><a href="#L2范数" class="headerlink" title="L2范数"></a>L2范数</h4><p>$p = 2$时，称为$L2$范数：</p>
+<script type="math/tex; mode=display">
+||x||_2 := (\sum_{i =1}^n x^{(i)})^{\frac{1}{2}}</script><p>可以理解为空间或平面内某一点到原点的距离。</p>
+<h4 id="L1-L2正则化和权重衰减-1"><a href="#L1-L2正则化和权重衰减-1" class="headerlink" title="L1/L2正则化和权重衰减"></a>L1/L2正则化和权重衰减</h4><p>通过在loss上增加了$L1$或$L2$范数项，达到参数惩罚的作用，即实现了正则化效果，从而称为$L1/L2$正则化。</p>
+
+<p><img src="/source/images/2023-09-15 21-17-12 的屏幕截图.png" alt="2023-09-15 21-17-12 的屏幕截图"></p>
+<p>由于其高次项参数的使用，使得模型对训练数据过分拟合，导致对未来更一般的数据预测性大大下降，为了缓解这种过拟合的现象，我们可以采用L2正则化。 使用$L2$范数的一个原因是它对权重向量的大分量施加了巨大的惩罚。 这使得我们的学习算法偏向于在大量特征上均匀分布权重的模型。具体来说就是在原有的损失函数上添加L2正则化项(l2-norm的平方)：</p>
+<p>原来的损失：</p>
+<script type="math/tex; mode=display">
+Q(\theta) = \frac{1}{2n} \sum_{i=1}^n (\hat{y} - y)^2</script><p>加上$L2$正则化项后的损失：</p>
+<script type="math/tex; mode=display">
+J(\theta) = Q(x) + \frac{1}{2n} \lambda \sum_{j=1}^{n} \theta_j^2</script><p>这里，通过正则化系数$\lambda$可以较好地惩罚高次项的特征，从而起到降低过拟合，正则化的效果。</p>
+<p>添加$L2$正则化修正以后的模型：</p>
+<p><img src="source/images/2023-09-15 21-39-05 的屏幕截图.png" alt="2023-09-15 21-39-05 的屏幕截图"></p>
+<h3 id="权重衰减-1"><a href="#权重衰减-1" class="headerlink" title="权重衰减"></a>权重衰减</h3><p>权重衰减weight decay，并不是一个规范的定义，而只是俗称而已，可以理解为削减/惩罚权重。在大多数情况下weight dacay 可以等价为L2正则化。L2正则化的作用就在于削减权重，降低模型过拟合，其行为即直接导致每轮迭代过程中的权重weight参数被削减/惩罚了一部分，故也称为权重衰减weight decay。从这个角度看，不论你用L1正则化还是L2正则化，亦或是其他的正则化方法，只要是削减了权重，那都可以称为weight dacay。从这个角度看，不论你用$L1$正则化还是$L2$正则化，亦或是其他的正则化方法，只要是削减了权重，那都可以称为weight dacay。</p>
+<p>设：</p>
+<ul>
+<li>参数矩阵为p（包括weight和bias）；</li>
+<li>模型训练迭代过程中计算出的loss对参数梯度为d_p；</li>
+<li>学习率lr；</li>
+<li>权重衰减参数为decay</li>
+</ul>
+<p>则不设dacay时，迭代时参数的更新过程可以表示为：</p>
+<script type="math/tex; mode=display">
+p = p - lr × d\_p</script><p>增加weight_dacay参数后更新过程可以表示为：</p>
+<script type="math/tex; mode=display">
+p = p - lr × （d\_p + p × dacay)</script><h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>在深度学习框架的实现中，可以通过设置weight_decay参数，直接对weight矩阵中的数值进行削减（而不是像L2正则一样，通过修改loss函数）起到正则化的参数惩罚作用。二者通过不同方式，同样起到了对权重参数削减/惩罚的作用，实际上在通常的随机梯度下降算法(SGD)中，通过数学计算L2正则化完全可以等价于直接权重衰减。（少数情况除外，譬如使用Adam优化器时，可以参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/40814046">L2正则=Weight Decay？并不是这样</a>）</p>
+<p>正因如此，深度学习框架通常实现weight dacay/L2正则化的方式很简单，直接指定weight_dacay参数即可。</p>
+<p>在pytorch/tensorflow等框架中，我们可以方便地指定weight_dacay参数，来达到正则化的效果，譬如在pytorch的sgd优化器中，直接指定weight_decay = 0.0001：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">optimizer = torch.optim.SGD(net.parameters(), lr=<span class="number">0.001</span>, weight_decay=<span class="number">0.0001</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn</span><br><span class="line"><span class="keyword">from</span> d2l <span class="keyword">import</span> torch <span class="keyword">as</span> d2l</span><br><span class="line"></span><br><span class="line"><span class="comment">#0.05 + 0.01X + e where e \in N(0, 0.01^2)</span></span><br><span class="line"></span><br><span class="line">n_train, n_test, num_inputs, batch_size = <span class="number">20</span>, <span class="number">100</span>, <span class="number">200</span>, <span class="number">5</span></span><br><span class="line">true_w, true_b = torch.ones((num_inputs, <span class="number">1</span>)) * <span class="number">0.01</span>, <span class="number">0.05</span></span><br><span class="line">train_data = d2l.synthetic_data(true_w, true_b, n_train)</span><br><span class="line">train_iter = d2l.load_array(train_data, batch_size)</span><br><span class="line">test_data = d2l.synthetic_data(true_w, true_b, n_test)</span><br><span class="line">test_iter = d2l.load_array(test_data, batch_size, is_train=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#定义一个函数来随机初始化参数模型</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_params</span>():</span><br><span class="line">    w = torch.normal(<span class="number">0</span>, <span class="number">1</span>, size=(num_inputs, <span class="number">1</span>), requires_grad=<span class="literal">True</span>)</span><br><span class="line">    b = torch.zeros(<span class="number">1</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">return</span> [w,b]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">l2_penalty</span>(<span class="params">w</span>):</span><br><span class="line">    <span class="keyword">return</span> torch.<span class="built_in">sum</span>(w.<span class="built_in">pow</span>(<span class="number">2</span>)) / <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#定义训练代码的实现</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">lambd</span>):</span><br><span class="line">    w, b = init_params()</span><br><span class="line">    net, loss = <span class="keyword">lambda</span> X: d2l.linreg(X, w, b), d2l.squared_loss</span><br><span class="line">    num_epochs, lr = <span class="number">100</span>, <span class="number">0.003</span></span><br><span class="line">    animator = d2l.Animator(xlabel=<span class="string">&#x27;epochs&#x27;</span>, ylabel=<span class="string">&#x27;loss&#x27;</span>, yscale=<span class="string">&#x27;log&#x27;</span>,</span><br><span class="line">                            xlim=[<span class="number">5</span>, num_epochs], legend=[<span class="string">&#x27;train&#x27;</span>, <span class="string">&#x27;test&#x27;</span>])</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(num_epochs):</span><br><span class="line">        <span class="keyword">for</span> X, y <span class="keyword">in</span> train_iter:</span><br><span class="line">            <span class="comment"># 增加了L2范数惩罚项，</span></span><br><span class="line">            <span class="comment"># 广播机制使l2_penalty(w)成为一个长度为batch_size的向量</span></span><br><span class="line">            l = loss(net(X), y) + lambd * l2_penalty(w)</span><br><span class="line">            l.<span class="built_in">sum</span>().backward()</span><br><span class="line">            d2l.sgd([w, b], lr, batch_size)</span><br><span class="line">        <span class="keyword">if</span> (epoch + <span class="number">1</span>) % <span class="number">5</span> == <span class="number">0</span>:</span><br><span class="line">            animator.add(epoch + <span class="number">1</span>, (d2l.evaluate_loss(net, train_iter, loss),</span><br><span class="line">                                     d2l.evaluate_loss(net, test_iter, loss)))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;w的L2范数是：&#x27;</span>, torch.norm(w).item())</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="comment">#忽略正则化直接进行训练</span></span><br><span class="line">train(lambd=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#使用权重衰减</span></span><br><span class="line">train(lambd=<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="简洁实现"><a href="#简洁实现" class="headerlink" title="简洁实现"></a>简洁实现</h3><p>由于权重衰减在神经网络优化中很常用， 深度学习框架为了便于我们使用权重衰减， 将权重衰减集成到优化算法中，以便与任何损失函数结合使用。 此外，这种集成还有计算上的好处， 允许在不增加任何额外的计算开销的情况下向算法中添加权重衰减。 由于更新的权重衰减部分仅依赖于每个参数的当前值， 因此优化器必须至少接触每个参数一次。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train_concise</span>(<span class="params">wd</span>):</span><br><span class="line">    net = nn.Sequential(nn.Linear(num_inputs, <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">for</span> param <span class="keyword">in</span> net.parameters():</span><br><span class="line">        param.data.normal_()</span><br><span class="line">    loss = nn.MSELoss(reduction=<span class="string">&#x27;none&#x27;</span>)</span><br><span class="line">    num_epochs, lr = <span class="number">100</span>, <span class="number">0.003</span></span><br><span class="line">    <span class="comment"># 偏置参数没有衰减</span></span><br><span class="line">    trainer = torch.optim.SGD([</span><br><span class="line">        &#123;<span class="string">&quot;params&quot;</span>:net[<span class="number">0</span>].weight,<span class="string">&#x27;weight_decay&#x27;</span>: wd&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;params&quot;</span>:net[<span class="number">0</span>].bias&#125;], lr=lr)</span><br><span class="line">    animator = d2l.Animator(xlabel=<span class="string">&#x27;epochs&#x27;</span>, ylabel=<span class="string">&#x27;loss&#x27;</span>, yscale=<span class="string">&#x27;log&#x27;</span>,</span><br><span class="line">                            xlim=[<span class="number">5</span>, num_epochs], legend=[<span class="string">&#x27;train&#x27;</span>, <span class="string">&#x27;test&#x27;</span>])</span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(num_epochs):</span><br><span class="line">        <span class="keyword">for</span> X, y <span class="keyword">in</span> train_iter:</span><br><span class="line">            trainer.zero_grad()</span><br><span class="line">            l = loss(net(X), y)</span><br><span class="line">            l.mean().backward()</span><br><span class="line">            trainer.step()</span><br><span class="line">        <span class="keyword">if</span> (epoch + <span class="number">1</span>) % <span class="number">5</span> == <span class="number">0</span>:</span><br><span class="line">            animator.add(epoch + <span class="number">1</span>,</span><br><span class="line">                         (d2l.evaluate_loss(net, train_iter, loss),</span><br><span class="line">                          d2l.evaluate_loss(net, test_iter, loss)))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;w的L2范数：&#x27;</span>, net[<span class="number">0</span>].weight.norm().item())</span><br></pre></td></tr></table></figure>
+<h2 id="暂退法-Dropout"><a href="#暂退法-Dropout" class="headerlink" title="暂退法 Dropout"></a>暂退法 Dropout</h2><h4 id="重新审视过拟合"><a href="#重新审视过拟合" class="headerlink" title="重新审视过拟合"></a>重新审视过拟合</h4><p>当面对更多的特征而样本不足时，线性模型往往会过拟合。相反，当给出更多样本而不是特征，通常线性模型不会过拟合。 不幸的是，线性模型泛化的可靠性是有代价的。 简单地说，线性模型没有考虑到特征之间的交互作用。 对于每个特征，线性模型必须指定正的或负的权重，而忽略其他特征。</p>
+<p>泛化性和灵活性之间的权衡被描述为<strong>偏差-方差权衡</strong>。线性模型有很高的偏差：它们只能表示一小类函数。然而，这些模型的方差很低：它们在不同的随机数据样本上可以得出相似的结果。</p>
+<p>深度学习网络位于偏差-方差谱的另一端。于线性模型不同，神经网络并不局限于查看每个特征，而是学习特征之间的交互。</p>
+<p>在探究泛化之前，我们先来定义以下什么是“好”的预测模型？我们期待好的预测模型能在未知的数据上有很好的表现， 经典泛化理论认为，为了缩小训练和测试性能之间的差距，应该以简单的模型为目标。</p>
+<p>简单性的另一个度量角度是平滑性，即函数不应该对其输入的微小变化而敏感 例如，当我们对图像进行分类时，我们预计向像素添加一些随机噪声应该是基本无影响的。在2014年，斯里瓦斯塔瓦等人就如何将毕晓普的想法应用于网络的内部层提出了一个想法： 在训练过程中他们建议在计算后续层之前向网络的每一层注入噪声。 因为当训练一个有多层的深层网络时，注入噪声只会在输入-输出映射上增强平滑性。</p>
+<p>这个想法被称为暂退法。暂退法在前向传播过程中，计算每一层内部的同时注入噪音，这已经成为训练神经网络的常用技术。这种方法之所以被称为暂退法，因为我们表面上看是在训练过程中丢弃的一些神经元。在整个训练过程的每一次迭代中，标准暂退法包括在计算下一层之前将当前层中的一些节点置零。</p>
+<p>需要说明的是，暂退法的原始论文提到了一个关于有性繁殖的类比： 神经网络过拟合与每一层都依赖于前一层激活值相关，称这种情况为“共适应性”。 作者认为，暂退法会破坏共适应性，就像有性生殖会破坏共适应的基因一样。</p>
+<p>那么关键的挑战就是如何注入这种噪声。 一种想法是以一种<em>无偏向</em>（unbiased）的方式注入噪声。 这样在固定住其他层时，每一层的期望值等于没有噪音时的值。</p>
+<p>可以考虑将高斯噪声加入到线性模型的输入中。在没次训练中，他将从均值为零的分布$\epsilon ～ N（0,\sigma)$采样噪声添加到输入$x$，从而产生扰动点$x’ = x + \epsilon$，期望是$E[x’] = x$。</p>
+<p>在标准暂退法正则化中，通过按保留（未丢弃）的节点的分数进行规范化来消除每一层的偏差。 换言之，每个中间活性值ℎ以*暂退概率$p$由随机变量$ℎ′$替换，如下所示：</p>
+<script type="math/tex; mode=display">
+h' = 
+\left\{
+\begin{array}{**lr**}  
+0 \quad 概率为0
+\\
+\frac{h}{1-p} \quad 其他情况
+\end{array}  
+\right.</script><p>根据此模型的设计，其期望值保持不变，即$E[x’] = x$。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>dropout相当于给出一个概率$p$，比方说$p=40\%$，那么就是说有$40\%$的文件要被删除，只留下$60%$的神经元，那么这就是我们的表面理解。对于程序来说，就是将这40%的神经元赋值0，那么可以想一下一个神经元等于0了，那么他对下一层还能产出结果吗，0乘多少权重都是0，相当于这个被dropout选中的神经元没价值了，那他就相当于被删了。</p>
+<h4 id="实践中的暂退法"><a href="#实践中的暂退法" class="headerlink" title="实践中的暂退法"></a>实践中的暂退法</h4><p>带有1个隐藏层和5个隐藏单元的多层感知机。 当我们将暂退法应用到隐藏层，以$p$的概率将隐藏单元置为零时， 结果可以看作一个只包含原始神经元子集的网络。假设隐藏单元为$h1,h2,h3,h4,h5$，我们删除了$h2,h5$，因此输出的计算不依赖$h2,h5$并且它们各自的梯度在之执行反向传播也会消失。这样，输出层的计算不能过度依赖$h1,…,h5$中的任意一个元素。</p>
+<h4 id="从零开始实现"><a href="#从零开始实现" class="headerlink" title="从零开始实现"></a>从零开始实现</h4><p>要实现单层的暂退法函数，我们从均匀分布$U[0,1]$中抽取样本，样本数于这层神经网络的维度一致。然后我们保留那些对应样本大于$p$的节点，把剩下的丢弃。</p>
+<p>在下面的代码中，我们实现dropout_layer函数，该函数以dropout的概率丢弃丢弃张量输入X中的元素，如上述重新缩放剩余部分：将剩余部分除以1.0-dropout。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn</span><br><span class="line"><span class="keyword">from</span> d2l <span class="keyword">import</span> torch <span class="keyword">as</span> d2l</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dropout_layer</span>(<span class="params">X, dropout</span>):</span><br><span class="line">    <span class="keyword">assert</span> <span class="number">0</span> &lt;= dropout &lt;= <span class="number">1</span></span><br><span class="line">    <span class="comment"># 在本情况中，所有元素都被丢弃</span></span><br><span class="line">    <span class="keyword">if</span> dropout == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> torch.zeros_like(X)</span><br><span class="line">    <span class="comment"># 在本情况中，所有元素都被保留</span></span><br><span class="line">    <span class="keyword">if</span> dropout == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> X</span><br><span class="line">    mask = (torch.rand(X.shape) &gt; dropout).<span class="built_in">float</span>()</span><br><span class="line">    <span class="keyword">return</span> mask * X / (<span class="number">1.0</span> - dropout)</span><br></pre></td></tr></table></figure>
+<h4 id="定义模型参数"><a href="#定义模型参数" class="headerlink" title="定义模型参数"></a>定义模型参数</h4><p>引入Fashion-MNIST数据集。我们定义具有两个隐藏层的多层感知机，每个隐藏层包含256个单元。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num_inputs, num_outputs, num_hiddens1, num_hiddens2 = <span class="number">784</span>, <span class="number">10</span>, <span class="number">256</span>, <span class="number">256</span></span><br></pre></td></tr></table></figure>
+<h4 id="定义模型"><a href="#定义模型" class="headerlink" title="定义模型"></a>定义模型</h4><p>我们可以将暂退法应用于每个隐藏层的输出（在激活函数之后）， 并且可以为每一层分别设置暂退概率： 常见的技巧是在靠近输入层的地方设置较低的暂退概率。 下面的模型将第一个和第二个隐藏层的暂退概率分别设置为0.2和0.5， 并且暂退法只在训练期间有效。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">dropout1, dropout2 = <span class="number">0.2</span>, <span class="number">0.5</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Net</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_inputs, num_outputs, num_hiddens1, num_hiddens2,</span></span><br><span class="line"><span class="params">                 is_training = <span class="literal">True</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(Net, self).__init__()</span><br><span class="line">        self.num_inputs = num_inputs</span><br><span class="line">        self.training = is_training</span><br><span class="line">        self.lin1 = nn.Linear(num_inputs, num_hiddens1)</span><br><span class="line">        self.lin2 = nn.Linear(num_hiddens1, num_hiddens2)</span><br><span class="line">        self.lin3 = nn.Linear(num_hiddens2, num_outputs)</span><br><span class="line">        self.relu = nn.ReLU()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, X</span>):</span><br><span class="line">        H1 = self.relu(self.lin1(X.reshape((-<span class="number">1</span>, self.num_inputs))))</span><br><span class="line">        <span class="comment"># 只有在训练模型时才使用dropout</span></span><br><span class="line">        <span class="keyword">if</span> self.training == <span class="literal">True</span>:</span><br><span class="line">            <span class="comment"># 在第一个全连接层之后添加一个dropout层</span></span><br><span class="line">            H1 = dropout_layer(H1, dropout1)</span><br><span class="line">        H2 = self.relu(self.lin2(H1))</span><br><span class="line">        <span class="keyword">if</span> self.training == <span class="literal">True</span>:</span><br><span class="line">            <span class="comment"># 在第二个全连接层之后添加一个dropout层</span></span><br><span class="line">            H2 = dropout_layer(H2, dropout2)</span><br><span class="line">        out = self.lin3(H2)</span><br><span class="line">        <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">net = Net(num_inputs, num_outputs, num_hiddens1, num_hiddens2)</span><br></pre></td></tr></table></figure>
+<h4 id="训练和测试"><a href="#训练和测试" class="headerlink" title="训练和测试"></a>训练和测试</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">num_epochs, lr, batch_size = <span class="number">10</span>, <span class="number">0.5</span>, <span class="number">256</span></span><br><span class="line">loss = nn.CrossEntropyLoss(reduction=<span class="string">&#x27;none&#x27;</span>)</span><br><span class="line">train_iter, test_iter = d2l.load_data_fashion_mnist(batch_size)</span><br><span class="line">trainer = torch.optim.SGD(net.parameters(), lr=lr)</span><br><span class="line">d2l.train_ch3(net, train_iter, test_iter, loss, num_epochs, trainer)</span><br></pre></td></tr></table></figure>
+<h4 id="简洁实现-1"><a href="#简洁实现-1" class="headerlink" title="简洁实现"></a>简洁实现</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn</span><br><span class="line"><span class="keyword">from</span> d2l <span class="keyword">import</span> torch <span class="keyword">as</span> d2l</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dropout_layer</span>(<span class="params">X, dropout</span>):</span><br><span class="line">    <span class="keyword">assert</span> <span class="number">0</span> &lt;= dropout &lt;= <span class="number">1</span></span><br><span class="line">    <span class="comment"># 在本情况中，所有元素都被丢弃</span></span><br><span class="line">    <span class="keyword">if</span> dropout == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> torch.zeros_like(X)</span><br><span class="line">    <span class="comment"># 在本情况中，所有元素都被保留</span></span><br><span class="line">    <span class="keyword">if</span> dropout == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> X</span><br><span class="line">    mask = (torch.rand(X.shape) &gt; dropout).<span class="built_in">float</span>()</span><br><span class="line">    <span class="keyword">return</span> mask * X / (<span class="number">1.0</span> - dropout)</span><br><span class="line"></span><br><span class="line">X= torch.arange(<span class="number">16</span>, dtype = torch.float32).reshape((<span class="number">2</span>, <span class="number">8</span>))</span><br><span class="line"><span class="built_in">print</span>(X)</span><br><span class="line"><span class="built_in">print</span>(dropout_layer(X, <span class="number">0.</span>))</span><br><span class="line"><span class="built_in">print</span>(dropout_layer(X, <span class="number">0.5</span>))</span><br><span class="line"><span class="built_in">print</span>(dropout_layer(X, <span class="number">1.</span>))</span><br><span class="line"></span><br><span class="line">num_inputs, num_outputs, num_hiddens1, num_hiddens2 = <span class="number">784</span>, <span class="number">10</span>, <span class="number">256</span>, <span class="number">256</span></span><br><span class="line"></span><br><span class="line">dropout1, dropout2 = <span class="number">0.2</span>, <span class="number">0.5</span></span><br><span class="line"></span><br><span class="line">net = nn.Sequential(nn.Flatten(),</span><br><span class="line">        nn.Linear(<span class="number">784</span>, <span class="number">256</span>),</span><br><span class="line">        nn.ReLU(),</span><br><span class="line">        <span class="comment"># 在第一个全连接层之后添加一个dropout层</span></span><br><span class="line">        nn.Dropout(dropout1),</span><br><span class="line">        nn.Linear(<span class="number">256</span>, <span class="number">256</span>),</span><br><span class="line">        nn.ReLU(),</span><br><span class="line">        <span class="comment"># 在第二个全连接层之后添加一个dropout层</span></span><br><span class="line">        nn.Dropout(dropout2),</span><br><span class="line">        nn.Linear(<span class="number">256</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_weights</span>(<span class="params">m</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">type</span>(m) == nn.Linear:</span><br><span class="line">        nn.init.normal_(m.weight, std=<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line">net.apply(init_weights);</span><br><span class="line"></span><br><span class="line">num_epochs, lr, batch_size = <span class="number">10</span>, <span class="number">0.5</span>, <span class="number">256</span></span><br><span class="line">loss = nn.CrossEntropyLoss()</span><br><span class="line">train_iter, test_iter = d2l.load_data_fashion_mnist(batch_size)</span><br><span class="line">trainer = torch.optim.SGD(net.parameters(), lr=lr)</span><br><span class="line"></span><br><span class="line">d2l.train_ch3(net, train_iter, test_iter, loss, num_epochs, trainer)</span><br></pre></td></tr></table></figure>
+<h2 id="前向传播、反向传播和计算图"><a href="#前向传播、反向传播和计算图" class="headerlink" title="前向传播、反向传播和计算图"></a>前向传播、反向传播和计算图</h2><p>我们已经学习了如何用小批量随机梯度下降训练模型。 然而当实现该算法时，我们只考虑了通过<em>前向传播</em>（forward propagation）所涉及的计算。 在计算梯度时，我们只调用了深度学习框架提供的反向传播函数，而不知其所以然。</p>
+<p>梯度的自动计算（自动微分）大大简化了深度学习算法的实现。 在自动微分之前，即使是对复杂模型的微小调整也需要手工重新计算复杂的导数， 学术论文也不得不分配大量页面来推导更新规则。 本节将通过一些基本的数学和计算图， 深入探讨<em>反向传播</em>的细节。 首先，我们将重点放在带权重衰减（ $L2$ 正则化）的单隐藏层多层感知机上。</p>
+<h4 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h4><p>前向传播指的是：按顺序（从输入层到输出层）计算和存储神经网络中每层的结果。</p>
+<p>我们将一步一步研究单隐藏层神经网络的机制，为简单起见，我们假设输入样本是$x \in R^d$，并且我们的隐藏层不包括偏置项。这里的中间变量是：</p>
+<script type="math/tex; mode=display">
+z = W^{(1)}x</script><p>其中$W^{(1)} \in R^{h*d}$是隐藏层的权重参数。将中间变量$z \in R^h$通过激活函数$\phi$，我们得到长度为$h$的隐藏激活向量：</p>
+<script type="math/tex; mode=display">
+h = \phi(z)</script><p>隐藏变量$h$也是一个中间变量。假设输出层的参数只有权重$W^{(2)} \in R^{q*h}$，我们可以得到输出层的变量，它是一个长度为$q$的向量：</p>
+<script type="math/tex; mode=display">
+o = W^{(2)}h</script><p>假设损失函数为$l$，样本标签为$y$，我们可以单个计算数据样本的损失项，$L = l(o,y)$</p>
+<p>根据$L2$正则化的定义，给定超参数$\lambda$，正则化项为</p>
+<script type="math/tex; mode=display">
+s = \frac{\lambda}{2}(||W||_F^2 + ||W||_F^2)</script><p>其中矩阵的Frobenius范数是将矩阵展平为向量后应用的$L2$范数。最后，模型在给定数据样本上的正则化损失为：</p>
+<script type="math/tex; mode=display">
+J = L + s</script><p>在下面讨论中，我们将$J$称为目标函数。</p>
+<h4 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h4><p>反向传播指的是计算神经网络参数梯度的方法。简言之，该方法根据微积分中的链式规则，按相反的顺序从输出层到输入层遍历网络。该算法存储了计算某些参数梯度时所需的任何中间变量（偏导数）。假设我们有函数$Y=f(X)$和$Z = g(X)$，其中输入和输出为$X,Y,Z$是任意形状的张量。利用链式法则，我们可以计算$Z$关于$X$的导数</p>
+<script type="math/tex; mode=display">
+\frac{\partial Z}{\partial L} = prod(\frac{\partial Z}{\partial Y}, \frac{\partial{Y}}{\partial X})</script><p>这里我们使用prod运算符在执行必要的操作（如换位和交换输入位置）后将其参数相乘。对于向量，这很简单，它只是矩阵-矩阵乘法。对于高维向量，我们使用适当的对因项。运算符prod代指了所有的这些符号。</p>
+<p>回想以下，在计算图中的单隐藏层简单网络的参数是$W^{(1)}$和$W^{(2)}$。反向传播的目的是计算度$\partial J/\partial W^{(1)}$和$\partial J/ \partial W^{(2)}$。为此，我们应用链式法则，依次计算每个中间变量和参数的梯度。计算的顺序与前向传播中执行的顺序相反，因为我们需要从计算图的结果开始，并朝着参数的方向努力。第一步是计算目标函数$J = L + s$相对于损失项L和正则项$s$的梯度。</p>
+<script type="math/tex; mode=display">
+\frac{\partial J}{\partial o}= prod(\frac{\partial J}{\partial L}, \frac{\partial L}{\partial o}) = \frac{\partial L}{\partial o} \in R^q</script><p>接下来，我们计算正则化项两个参数的梯度：</p>
+<p>$\frac{\partial s}{\partial W^{(1)}} = \lambda W^{(1)} and \frac{\partial s}{\partial W^{(2)}} = \lambda W^{(2)}$</p>
+<p>现在我们可以计算最接近输出层的模型的梯度$\frac{\partial J}{\partial W^{(2)}} \in R^{q*h}$。使用链式法则得出：</p>
+<script type="math/tex; mode=display">
+\frac{\partial J}{\partial W^{(2)}} = prod(\frac{\partial J}{\partial o}, \frac{\partial o}{\partial W^{(2)}}) + prod(\frac{\partial J}{\partial s}, \frac{\partial s}{\partial W^{(2)}}) = \lambda W^{(2)}</script><p>为了获得关于$W^{(1)}$的梯度，我们需要继续沿着输出层到隐藏层反向传播。关于隐藏层输出的梯度$\partial J/ \partial h \in R^h$由下式给出：</p>
+<script type="math/tex; mode=display">
+\frac{\partial J}{\partial h} = prod(\frac{\partial J}{\partial o}) = W^{(2)^T} \frac{\partial J}{\partial o}</script><p>由于激活函数$\phi$是按元素计算的，计算中间变量$z$的梯度$\partial J/ \partial z \in R^n$需要使用按元素乘法运算符，我们用$\odot$来表示：</p>
+<script type="math/tex; mode=display">
+\frac{\partial J}{\partial z} = prod(\frac{\partial J}{\partial h}, \frac{\partial h}{\partial z}) = \frac{\partial J}{\partial h } \odot \phi'(z)</script><p>最后，我们可以得到最接近输入层的的模型参数的梯度$\partial J / \partial W^{(1)} \in R^{h*d}$。根据链式法则，我们得到：</p>
+<script type="math/tex; mode=display">
+\frac{\partial J}{\partial W^{(1)}} = prod(\frac{\partial J}{\partial z},\frac{\partial z}{\partial W^{(1)}}) + prod(\frac{\partial J}{\partial s}, \frac{s}{W^{(1)}}) = \frac{\partial J}{\partial z}x^T + \lambda W^{(1)}</script><h4 id="训练神经网络"><a href="#训练神经网络" class="headerlink" title="训练神经网络"></a>训练神经网络</h4><p>在训练神经网络时，前向传播和反向传播相互依赖。 对于前向传播，我们沿着依赖的方向遍历计算图并计算其路径上的所有变量。 然后将这些用于反向传播，其中计算顺序与计算图的相反。</p>
+<p>以上述简单网络为例：一方面，在前向传播期间计算正则项取决于模型参数$W^{(1)}$和$W^{(2)}$的当前值。它们是由优化算法根据最近迭代的反向传播给出的。另一方面，反向传播期间参数的梯度计算，取决于由前向传播给出的隐藏层变量$h$的当前值。</p>
+<p>因此，在训练神经网络时，在初始化模型参数后， 我们交替使用前向传播和反向传播，利用反向传播给出的梯度来更新模型参数。 注意，反向传播重复利用前向传播中存储的中间值，以避免重复计算。 带来的影响之一是我们需要保留中间值，直到反向传播完成。 这也是训练比单纯的预测需要更多的内存（显存）的原因之一。 此外，这些中间值的大小与网络层的数量和批量的大小大致成正比。 因此，使用更大的批量来训练更深层次的网络更容易导致<em>内存不足</em>（out of memory）错误。</p>
+<h2 id="数值稳定和模型初始化"><a href="#数值稳定和模型初始化" class="headerlink" title="数值稳定和模型初始化"></a>数值稳定和模型初始化</h2><h3 id="part1：为什么要用梯度更新"><a href="#part1：为什么要用梯度更新" class="headerlink" title="part1：为什么要用梯度更新"></a>part1：为什么要用梯度更新</h3>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/08/07/softmax%E5%9B%9E%E5%BD%92/" rel="prev" title="softmax回归">
+      <i class="fa fa-chevron-left"></i> softmax回归
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/09/01/C++Primer/" rel="next" title="C++Priemr.md">
+      C++Priemr.md <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DeepLearning"><span class="nav-number">1.</span> <span class="nav-text">DeepLearning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="nav-number">1.1.</span> <span class="nav-text">多层感知机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%87%BA%E9%94%99"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 线性模型可能会出错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%9C%A8%E7%BD%91%E7%BB%9C%E4%B8%AD%E5%8A%A0%E5%85%A5%E9%9A%90%E8%97%8F%E5%B1%82"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 在网络中加入隐藏层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E4%BB%8E%E7%BA%BF%E6%80%A7%E5%88%B0%E9%9D%9E%E7%BA%BF%E6%80%A7"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 从线性到非线性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E9%80%9A%E7%94%A8%E8%BF%91%E4%BC%BC%E5%AE%9A%E7%90%86"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.4 通用近似定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.5.</span> <span class="nav-text">1.5 激活函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-ReLU%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.6.</span> <span class="nav-text">1.6 ReLU函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-sigmoid%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.7.</span> <span class="nav-text">1.7 sigmoid函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-8-tanh-%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.8.</span> <span class="nav-text">1.8 tanh 函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9%EF%BC%8C%E8%BF%87%E6%8B%9F%E5%90%88%E5%92%8C%E6%AC%A0%E6%8B%9F%E5%90%88"><span class="nav-number">1.2.</span> <span class="nav-text">模型选择，过拟合和欠拟合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AF%E5%B7%AE"><span class="nav-number">1.2.1.</span> <span class="nav-text">误差</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E8%AF%AF%E5%B7%AE"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">训练误差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%9B%E5%8C%96%E8%AF%AF%E5%B7%AE"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">泛化误差</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA"><span class="nav-number">1.2.2.</span> <span class="nav-text">系统学习理论</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8B%AC%E7%AB%8B%E5%90%8C%E5%88%86%E5%B8%83"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">独立同分布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">模型选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#K%E6%8A%98%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">K折交叉验证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AC%A0%E6%8B%9F%E5%90%88-amp-amp-%E8%BF%87%E6%8B%9F%E5%90%88"><span class="nav-number">1.2.3.</span> <span class="nav-text">欠拟合&amp;&amp;过拟合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AC%A0%E6%8B%9F%E5%90%88"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">欠拟合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E6%AC%A0%E6%8B%9F%E5%90%88"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">如何解决欠拟合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E6%8B%9F%E5%90%88"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">过拟合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%BF%87%E6%8B%9F%E5%90%88%E7%8E%B0%E8%B1%A1%EF%BC%9F"><span class="nav-number">1.2.3.4.</span> <span class="nav-text">为什么会出现过拟合现象？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2%E8%BF%87%E6%8B%9F%E5%90%88%EF%BC%9F"><span class="nav-number">1.2.3.5.</span> <span class="nav-text">如何防止过拟合？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E9%A1%B9%E5%BC%8F%E5%9B%9E%E5%BD%92"><span class="nav-number">1.2.4.</span> <span class="nav-text">多项式回归</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">生成数据集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E6%A8%A1%E5%9E%8B%E8%BF%9B%E8%A1%8C%E8%AE%AD%E7%BB%83%E5%92%8C%E6%B5%8B%E8%AF%95"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">对模型进行训练和测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E9%98%B6%E5%A4%9A%E9%A1%B9%E5%BC%8F%E5%87%BD%E6%95%B0%E6%8B%9F%E5%90%88"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">三阶多项式函数拟合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0%E6%8B%9F%E5%90%88%EF%BC%88%E6%AC%A0%E6%8B%9F%E5%90%88%EF%BC%89"><span class="nav-number">1.2.4.4.</span> <span class="nav-text">线性函数拟合（欠拟合）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E9%98%B6%E5%A4%9A%E9%A1%B9%E5%BC%8F%E6%8B%9F%E5%90%88%EF%BC%88%E8%BF%87%E6%8B%9F%E5%90%88%EF%BC%89"><span class="nav-number">1.2.4.5.</span> <span class="nav-text">高阶多项式拟合（过拟合）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%83%E9%87%8D%E8%A1%B0%E5%87%8F"><span class="nav-number">1.3.</span> <span class="nav-text">权重衰减</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#L1-L2%E6%AD%A3%E5%88%99%E5%8C%96%E5%92%8C%E6%9D%83%E9%87%8D%E8%A1%B0%E5%87%8F"><span class="nav-number">1.3.1.</span> <span class="nav-text">L1&#x2F;L2正则化和权重衰减</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#L1%E8%8C%83%E6%95%B0"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">L1范数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#L2%E8%8C%83%E6%95%B0"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">L2范数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#L1-L2%E6%AD%A3%E5%88%99%E5%8C%96%E5%92%8C%E6%9D%83%E9%87%8D%E8%A1%B0%E5%87%8F-1"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">L1&#x2F;L2正则化和权重衰减</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%83%E9%87%8D%E8%A1%B0%E5%87%8F-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">权重衰减</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.3.</span> <span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E6%B4%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.3.4.</span> <span class="nav-text">简洁实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9A%82%E9%80%80%E6%B3%95-Dropout"><span class="nav-number">1.4.</span> <span class="nav-text">暂退法 Dropout</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E5%AE%A1%E8%A7%86%E8%BF%87%E6%8B%9F%E5%90%88"><span class="nav-number">1.4.0.1.</span> <span class="nav-text">重新审视过拟合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.4.0.2.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E6%9A%82%E9%80%80%E6%B3%95"><span class="nav-number">1.4.0.3.</span> <span class="nav-text">实践中的暂退法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.4.0.4.</span> <span class="nav-text">从零开始实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="nav-number">1.4.0.5.</span> <span class="nav-text">定义模型参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.4.0.6.</span> <span class="nav-text">定义模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E5%92%8C%E6%B5%8B%E8%AF%95"><span class="nav-number">1.4.0.7.</span> <span class="nav-text">训练和测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E6%B4%81%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">1.4.0.8.</span> <span class="nav-text">简洁实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD%E3%80%81%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E5%92%8C%E8%AE%A1%E7%AE%97%E5%9B%BE"><span class="nav-number">1.5.</span> <span class="nav-text">前向传播、反向传播和计算图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.5.0.1.</span> <span class="nav-text">前向传播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">1.5.0.2.</span> <span class="nav-text">反向传播</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="nav-number">1.5.0.3.</span> <span class="nav-text">训练神经网络</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E7%A8%B3%E5%AE%9A%E5%92%8C%E6%A8%A1%E5%9E%8B%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.6.</span> <span class="nav-text">数值稳定和模型初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#part1%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%E6%A2%AF%E5%BA%A6%E6%9B%B4%E6%96%B0"><span class="nav-number">1.6.1.</span> <span class="nav-text">part1：为什么要用梯度更新</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="xxfs"
+      src="https://avatars.githubusercontent.com/u/118061468?v=4">
+  <p class="site-author-name" itemprop="name">xxfs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxfa040" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxfa040" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tanghuiye1@163.com" title="E-Mail → mailto:tanghuiye1@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xxfs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+<div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        本站访客数:<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        本站访问量<span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"0c5fa03e64aa23b2873f","app_key":"0865e2ad5458a48d2a9aa94848b968793b834bf6","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '0c5fa03e64aa23b2873f',
+      clientSecret: '0865e2ad5458a48d2a9aa94848b968793b834bf6',
+      repo        : 'xxfs040.github.io',
+      owner       : 'xxfs040',
+      admin       : ['xxfs040'],
+      id          : 'e875c8c17c25c2f7c3727c6cc5c022bc',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

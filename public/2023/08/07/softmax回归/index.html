@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xxfs040.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="softmax  回归softmax 回归实际上是分类问题。 预备知识sigmoid函数，softmax函数，极大似然估计，交叉熵函数，one-hot编码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="softmax回归">
+<meta property="og:url" content="https://xxfs040.github.io/2023/08/07/softmax%E5%9B%9E%E5%BD%92/index.html">
+<meta property="og:site_name" content="XXFS">
+<meta property="og:description" content="softmax  回归softmax 回归实际上是分类问题。 预备知识sigmoid函数，softmax函数，极大似然估计，交叉熵函数，one-hot编码。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-08-07T15:19:01.000Z">
+<meta property="article:modified_time" content="2023-09-15T07:13:19.298Z">
+<meta property="article:author" content="xxfs">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xxfs040.github.io/2023/08/07/softmax%E5%9B%9E%E5%BD%92/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>softmax回归 | XXFS</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="XXFS" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">XXFS</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="link fa-fw"></i>Links</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://xxfs040.github.io/2023/08/07/softmax%E5%9B%9E%E5%BD%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/118061468?v=4">
+      <meta itemprop="name" content="xxfs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XXFS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          softmax回归
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-08-07 23:19:01" itemprop="dateCreated datePublished" datetime="2023-08-07T23:19:01+08:00">2023-08-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index"><span itemprop="name">deep learning</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2023/08/07/softmax%E5%9B%9E%E5%BD%92/" class="post-meta-item leancloud_visitors" data-flag-title="softmax回归" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="softmax-回归"><a href="#softmax-回归" class="headerlink" title="softmax  回归"></a>softmax  回归</h2><p>softmax 回归实际上是分类问题。</p>
+<h3 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h3><p>sigmoid函数，softmax函数，极大似然估计，交叉熵函数，one-hot编码。</p>
+<span id="more"></span>
+<hr>
+<h3 id="1-sigmoid函数"><a href="#1-sigmoid函数" class="headerlink" title="1 sigmoid函数"></a>1 sigmoid函数</h3><h4 id="1-1定义"><a href="#1-1定义" class="headerlink" title="1.1定义"></a>1.1定义</h4><p>sigmoid函数是一个在生物学中常见的函数，也称为S型生长曲线。Sigmoid函数常被用作神经网络的阈值函数，将变量映射到0，1之间。</p>
+<h4 id="1-2公式"><a href="#1-2公式" class="headerlink" title="1.2公式"></a>1.2公式</h4><script type="math/tex; mode=display">
+S(x) = \frac{1} {1+e^{-x} } = \frac{e^x} {e^x + 1}</script><p>其对x的导数可以用自身表示：</p>
+<script type="math/tex; mode=display">
+S^{'}(x) = \frac{e^{-x} }{ {(1+e^{-x})}^2} = S(x)(1 - S(x))</script><hr>
+<h3 id="2-softmax函数"><a href="#2-softmax函数" class="headerlink" title="2 softmax函数"></a>2 softmax函数</h3><h4 id="2-1-定义"><a href="#2-1-定义" class="headerlink" title="2.1 定义"></a>2.1 定义</h4><p>在数学，尤其是概率论和相关领域中，Softmax 函数，或称归一化函数，是逻辑函数的一种推广。它能将一个含任意实数的K维向量z的”压缩”到另一个K维实向量$\sigma(z)$中，使得每一个元素的范围都在$(0,1)$之间，并且所有的元素和为1。</p>
+<h4 id="2-2-公式"><a href="#2-2-公式" class="headerlink" title="2.2 公式"></a>2.2 公式</h4><script type="math/tex; mode=display">
+\sigma(z)_j = \frac{e^{z_j} } {\sum^K_{k=1} } \quad for j=1,...,k</script><p>在多项逻辑回归和线性分析中，函数的输入是从K个不同的线性函数得到的结果，而样本向量$x$属于第$j$个分类的概率为：</p>
+<script type="math/tex; mode=display">
+P(y=j|x) = \frac{e^{x^1w_j} } {\sum^K_{k=1} }e^{x^Tw_k}</script><p>这可以被视作K个线性函数$x- &gt; x^T w_1,…, x^T w_k $ Softmax函数的复合。</p>
+<hr>
+<h3 id="3-极大似然估计"><a href="#3-极大似然估计" class="headerlink" title="3.  极大似然估计"></a>3.  极大似然估计</h3><h4 id="3-1-似然函数"><a href="#3-1-似然函数" class="headerlink" title="3.1 似然函数"></a>3.1 似然函数</h4><p>相信大家已经掌握条件概率函数。那么我们假设一个条件概率函数为$P(\theta_k|x)$，其中，$\theta_k$已知，我们希望通过已知的$\theta_k$求出未知的变量$x$。</p>
+<p>那么应该如何理解似然函数呢？</p>
+<p>我们先给出似然函数的定义式：</p>
+<script type="math/tex; mode=display">
+L(\theta|x) = P(x|\theta)</script><p>这时$x$是已知的，而$\theta$作为模型参数是未知的。</p>
+<h4 id="3-2-最大似然函数"><a href="#3-2-最大似然函数" class="headerlink" title="3.2 最大似然函数"></a>3.2 最大似然函数</h4><p>最大似然函数的思想在于，对于给定的观测数据$x$，我们希望从所有$\theta_1,\theta_2,…,\theta_n$中找出能最大化概率函数的参数$\theta_x$即可：</p>
+<script type="math/tex; mode=display">
+L(\theta_x|x)=P(x|\theta_x) >= L(\theta|x)=P(x|\theta) \quad \theta=\theta_1,...\theta_n</script><p>那么在实际运算中，我们将代估计的参数$\theta$看成是变量，通过$\theta$变量计算出概率函数$P(x|\theta)$，并找到能使得概率函数取得最大化的参数($\theta$)即可。</p>
+<script type="math/tex; mode=display">
+\theta_x = arg \mathop{max}_{\theta} p(x|\theta)</script><p>这一步骤通过求导数得到导数为0来解。</p>
+<h4 id="3-3-离散随机变量的最大似然估计"><a href="#3-3-离散随机变量的最大似然估计" class="headerlink" title="3. 3 离散随机变量的最大似然估计"></a>3. 3 离散随机变量的最大似然估计</h4><p>离散型随机变量$X$的分布律为$P\{A=x\}=p(x;\theta)$，$A_1,A_2,…,A_n$为来自$A$的样本，$x_1,x_2,…,x_n$为样本对应的观测值，$\theta$为待估计参数。</p>
+<p>在参数$\theta$下，分布函数随机取到$x_1,…,x_n$的概率是</p>
+<script type="math/tex; mode=display">
+P(x|\theta) = \prod \limits_{i=1}^N P(x_i;\theta)</script><p>我们的目标是找到使$P(x|\theta)$最大化的参数$\theta$。</p>
+<p>求解最大值，通常是求导等于0：</p>
+<script type="math/tex; mode=display">
+\frac{d}{d\theta} L(\theta|x) = 0</script><p> 由于$L(\theta|x)$通常是由累乘的形式，我们借助对数函数来简化问题：</p>
+<script type="math/tex; mode=display">
+\frac{d}{d \theta} L(\theta|x) = 0</script><p>上式也通常被称作<strong>对数似然方程</strong>。如果$\theta$包含多个$\theta_1,…\theta_k$可以对每个$\theta$求偏导来连立方程组。</p>
+<h4 id="3-4-连续型随机变量的最大似然估计"><a href="#3-4-连续型随机变量的最大似然估计" class="headerlink" title="3.4 连续型随机变量的最大似然估计"></a>3.4 连续型随机变量的最大似然估计</h4><p>连续型随机变量$X$的概率密度为$f(x;\theta)$，设$X_1,…,X_n$为样本，相应的观察值为$x_1,x_2,…,x_n$。</p>
+<p>与离散型随机变量类似，构造似然函数为：</p>
+<script type="math/tex; mode=display">
+L(x|\theta) = p(x;\theta) = \prod \limits_{i=1}^n f(x_i;\theta)dx</script><p>由于$\prod limits_{i=1}^n dx$不随参数变化，故我们选择忽略，似然函数变为：</p>
+<script type="math/tex; mode=display">
+L(x|\theta) = \prod \limits_{i=1}^N P(x_i;\theta)</script><script type="math/tex; mode=display">
+</script><hr>
+<h3 id="4-交叉熵函数"><a href="#4-交叉熵函数" class="headerlink" title="4 交叉熵函数"></a>4 交叉熵函数</h3><h4 id="4-1-熵"><a href="#4-1-熵" class="headerlink" title="4.1 熵"></a>4.1 熵</h4><p>信息论中熵的概念首次被香农提出，目的是寻找一种高效/无损地编码信息的方法：以编码后数据的平均长度来衡量高效性，平均长度越小越高效；同时还需满足“无损”的条件，即编码后不能有原始信息的丢失。这样，香农提出了熵的定义：无损编码事件信息的最小平均编码长度。</p>
+<p><strong>直接计算熵</strong></p>
+<p>假设一个事件有八中可能性，且各个状态等可能性，即可能性都是12.5%，也就是1/8，那么我们需要多少为来编码这八个值呢？答案是$2^3$，也就是三位。我们不能减少任何1位，因为那样会造成歧义，同样我们也不要多于3位来编码8个可能的值。用归纳法来看假设有N种状态，每种状态是等可能的，那么每种状态的可能性为$P=\frac{1}{N}$，那么我们用以下公式计算编码位数：</p>
+<script type="math/tex; mode=display">
+log_2 N = - log_2 \frac{1} {N} = -log_2P</script><p>那么计算平均最小长度</p>
+<script type="math/tex; mode=display">
+Entropy =- \sum_i P(i) log_2 P(i)</script><p>其中P(i)是第i个信息状态的可能性。相当于，熵=编码长度*可能性。</p>
+<p>如果熵比较大(即平均编码长度较长)，意味着这一信息有较多的可能状态，相应的每个状态的可能性比较低；因此每当来了一个新的信息，我们很难对其作出准确预测，即有着比较大的混乱程度/不确定性/不可预测性。</p>
+<h4 id="4-2-交叉熵"><a href="#4-2-交叉熵" class="headerlink" title="4.2 交叉熵"></a>4.2 交叉熵</h4><p>对于离散型随机变量，熵的公式可以表示为</p>
+<script type="math/tex; mode=display">
+-\sum_i P(i)log_2P(i)</script><p>对于连续型随机变量，熵的公式可以表示为：</p>
+<script type="math/tex; mode=display">
+- \int P(x) log_2 P(x) dx</script><p>那么我们现在有真实的概率分布$P$，以及预测的概率分布$Q$。</p>
+<p>j假设计算离散型变量的交叉熵，在计算交叉熵时，我们可以采用以下公式，即使用$P$计算平均编码长度，使用$Q$计算实际编码长度：</p>
+<script type="math/tex; mode=display">
+CrossEntropy = - \sum_i P(x_i) logQ(x_i)</script><p>假设计算连续型变量的交叉熵，在计算交叉熵时，我们可以采用以下公式，即使用$P$计算平均编码长度，使用$Q$计算实际编码长度：</p>
+<script type="math/tex; mode=display">
+CrossEntorpy = - \int P(x)logQ(x)dx</script><hr>
+<h3 id="5-softmax-回归"><a href="#5-softmax-回归" class="headerlink" title="5 softmax 回归"></a>5 softmax 回归</h3><p>使用热独编码，分量和类别一样多。类别对应的分量设置为1，其他所有分量设置为0。假设标签$y$是一个三维向量其中$(1,0,0)$对应猫，$(0,1,0)$对应鸡，$(0,0,1)$对应于狗。我们需要和输出一样多的仿射函数。</p>
+<script type="math/tex; mode=display">
+\begin{array}{1}
+o_1 = x_1 \omega_11 + x_2 \omega_12 + x_3 \omega_13 + x_4 \omega_14 + b_1 \\
+o_2 = x_1 \omega_21 + x_2 \omega_22 + x_3 \omega_23 + x_4 \omega_24 + b_2 \\
+o_3 = x_3 \omega_31 + x_2 \omega_32 + x_3 \omega_33 + x_4 \omega_34 + b_3 \\
+\end{array}
+\tag{1}</script><p>为了更简洁表述，我们用向量形式来描述$o = Wx + b$。</p>
+<p>现在我们将优化参数以最大化观测数据的概率。我们希望模型的输出$y_j$可以视为属于$j$类的概率，然后选择具有最大输出值的类别$argmax_j y_j$作为我们的预测。例如，$y_1,y_2,y_3$分别是$0.1,0.8,0.1$那么我们可以判断其类别为”鸡“。</p>
+<p>要将输出视为概率，我们必须保证在任何数据上的输出都是非负的且总和为1。此外我们需要训练一个目标函数来激励模型精准的估计概率。</p>
+<p>由于softmax函数能够将为规范化的预测变为非负数且总和为1，同时让模型保持可导的性质。我们可以将输出$o$输入进softmax函数：</p>
+<script type="math/tex; mode=display">
+\hat{y} = softmax(o) \quad 其中 \quad \hat{y_j} = \frac{e^{o_j} } {\sum_k e^{k}} = \frac{e^{o_j} } {e^1 + e^2 + ... + e^k} \tag{2}</script><p>在预测过程中，我们仍然可以用下式来选择最有可能的类别。</p>
+<script type="math/tex; mode=display">
+\mathop{argmax}\limits_j \quad \hat{y_j} = \mathop{argmax} \limits_j \quad o_j \tag{3}</script><h4 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h4><p>假设给出数据集${X,Y}$有$n$个样本，其中索引$i$的样本有特征向量$x^{(i)}$和独热标签向量$y^{(i)}$组成。我们可以将估计值和真实值进行比较：</p>
+<script type="math/tex; mode=display">
+P(Y|X) = \prod \limits_{i=1}^n P(y_i|x_i) \tag{4}</script><p>根据最大似然估计，我们最大化$P(Y|X)$，相当于最小化负对数似然：</p>
+<script type="math/tex; mode=display">
+- logP(Y|X) = \sum \limits_{i=1}^n - log P(y^{(i)}|x^{(i)}) = \sum \limits_{i=1}^{n} l(y^{(i)},\hat{y^{(i)} }) \tag{5}</script><p>对于任何标签$y$和预测模型$\hat{y}$，损失函数为：</p>
+<script type="math/tex; mode=display">
+l(y,\hat{y}) = -\sum \limits_{i=1}^q y_i log \hat{y_i} \tag{6}</script><p>我们可以将$(2)$带入$(6)$中去，利用softmax定义我们得到：</p>
+<script type="math/tex; mode=display">
+\begin{array}
+{1} l(y,\hat{y}) = - \sum \limits^q_{j = 1} y_i log\frac{exp(o_j)}{\sum_{k=1}^q exp(o_k)}
+\\
+=\sum_{j=1}^q y_i log \sum_{k=1}^q exp(o_k) - \sum \limits^q_{j=1}y_i o_j
+\\
+=log \sum \limits_{k=1}^q exp(o_k) - \sum_{j=1}^q y_j  o_j
+\end{array}</script><p>对$o_j$求偏导，我们得到：</p>
+<script type="math/tex; mode=display">
+\partial_{o_j} l(y,\hat{y}) = \frac{exp(o_j)}{\sum\limits_{k=1}^q exp(o_k)} -y_i = softmax(o)_j - y_i \tag{7}</script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/08/07/SummerRecord2023/" rel="prev" title="一些记录或是吐嘈">
+      <i class="fa fa-chevron-left"></i> 一些记录或是吐嘈
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/08/07/DeepLearning/" rel="next" title="DeepLearning">
+      DeepLearning <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#softmax-%E5%9B%9E%E5%BD%92"><span class="nav-number">1.</span> <span class="nav-text">softmax  回归</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="nav-number">1.1.</span> <span class="nav-text">预备知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-sigmoid%E5%87%BD%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text">1 sigmoid函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.1定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2%E5%85%AC%E5%BC%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">1.2公式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-softmax%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.</span> <span class="nav-text">2 softmax函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E5%AE%9A%E4%B9%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">2.1 定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-%E5%85%AC%E5%BC%8F"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.2 公式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1"><span class="nav-number">1.4.</span> <span class="nav-text">3.  极大似然估计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E4%BC%BC%E7%84%B6%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.1.</span> <span class="nav-text">3.1 似然函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.2.</span> <span class="nav-text">3.2 最大似然函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-%E7%A6%BB%E6%95%A3%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E7%9A%84%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1"><span class="nav-number">1.4.3.</span> <span class="nav-text">3. 3 离散随机变量的最大似然估计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-%E8%BF%9E%E7%BB%AD%E5%9E%8B%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E7%9A%84%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1"><span class="nav-number">1.4.4.</span> <span class="nav-text">3.4 连续型随机变量的最大似然估计</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BA%A4%E5%8F%89%E7%86%B5%E5%87%BD%E6%95%B0"><span class="nav-number">1.5.</span> <span class="nav-text">4 交叉熵函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-%E7%86%B5"><span class="nav-number">1.5.1.</span> <span class="nav-text">4.1 熵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-%E4%BA%A4%E5%8F%89%E7%86%B5"><span class="nav-number">1.5.2.</span> <span class="nav-text">4.2 交叉熵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-softmax-%E5%9B%9E%E5%BD%92"><span class="nav-number">1.6.</span> <span class="nav-text">5 softmax 回归</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">1.6.1.</span> <span class="nav-text">损失函数</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="xxfs"
+      src="https://avatars.githubusercontent.com/u/118061468?v=4">
+  <p class="site-author-name" itemprop="name">xxfs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xxfa040" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xxfa040" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:tanghuiye1@163.com" title="E-Mail → mailto:tanghuiye1@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xxfs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+<div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        本站访客数:<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        本站访问量<span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"0c5fa03e64aa23b2873f","app_key":"0865e2ad5458a48d2a9aa94848b968793b834bf6","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '0c5fa03e64aa23b2873f',
+      clientSecret: '0865e2ad5458a48d2a9aa94848b968793b834bf6',
+      repo        : 'xxfs040.github.io',
+      owner       : 'xxfs040',
+      admin       : ['xxfs040'],
+      id          : '80597958e401542670527c41fa77fe40',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
